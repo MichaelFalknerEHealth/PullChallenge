@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainScreen">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="Welcome"
+        android:textStyle="bold"
+        android:textSize="35sp"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="50dp"
+        android:gravity="center"
+        android:id="@+id/TVwelcome"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/TVname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TVwelcome"
+        android:layout_margin="50dp"
+        android:layout_marginTop="61dp"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:text="filler"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/pull_up"
+        android:layout_width="177dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TVname"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:text="Pull Up Challenge"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

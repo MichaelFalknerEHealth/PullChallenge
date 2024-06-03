@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+   <TextView
+       android:layout_width="match_parent"
+       android:text="@string/TVLogin"
+       android:textStyle="bold"
+       android:textSize="35sp"
+       android:textColor="@color/black"
+       android:layout_centerHorizontal="true"
+       android:layout_margin="50dp"
+       android:gravity="center"
+       android:id="@+id/loginTv"
+       android:layout_height="wrap_content"/>
+    
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/etUser"
+        android:hint="Username"
+        android:textColorHint="@color/black"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:layout_below="@id/loginTv"
+        android:drawableLeft="@drawable/person"
+        android:drawablePadding="10dp"
+        android:inputType="textPersonName"
+        android:layout_height="wrap_content"/>
+
+
+    <EditText
+        android:id="@+id/etPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etUser"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        android:drawableLeft="@drawable/lock_24px"
+        android:drawablePadding="10dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="20dp"
+        android:textColorHint="@color/black" />
+
+    <ImageButton
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/IVvisible"
+        android:layout_below="@id/etUser"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/visibility_off_24px"
+        android:layout_alignRight="@id/etPass"
+        android:layout_marginTop="30dp"/>
+
+
+    <CheckBox
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/CBshowPass"
+        android:visibility="invisible"
+        android:drawableRight="@drawable/visibility_24px"
+        android:layout_below="@id/etUser"
+        android:layout_marginRight="20dp"
+        android:layout_alignRight="@id/etPass"
+        android:layout_marginTop="30dp" />
+
+
+
+ <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_below="@id/etPass"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:backgroundTint="#00BCD4"
+        android:text="@string/BTSignIn"
+        android:textStyle="bold"
+        android:id="@+id/loginBtn"
+        android:textSize="18dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_below="@id/loginBtn"
+        android:layout_margin="5dp"
+        android:backgroundTint="#00BCD4"
+        android:text="@string/TVNoACC"
+        android:textStyle="normal"
+        android:id="@+id/TVregister"
+        android:textSize="18dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+
+ <com.google.android.material.button.MaterialButton
+     android:layout_width="wrap_content"
+     android:layout_below="@id/TVregister"
+     android:layout_margin="5dp"
+     android:backgroundTint="#00BCD4"
+     android:text="@string/BTdatabase"
+     android:textStyle="bold"
+     android:id="@+id/adminBtn"
+     android:textSize="18dp"
+     android:layout_height="wrap_content"
+     android:layout_centerHorizontal="true"
+     android:gravity="center"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Pull_Up_Challenge</string>
+    <string name="gravitation">Gravitation</string>
+    <string name="rauf">Rauf</string>
+    <string name="runter">Runter</string>
+    <string name="pullup">Pull Ups</string>
+    <string name="geschwindigkeit">m/s²</string>
+    <string name="endscore">Endscore:</string>
+    <string name="anzahl">Anzahl:   </string>
+    <string name="ende">Ende</string>
+    <string name="start">Start</string>
+    <string name="bt_back">Speichern und zurück</string>
+    <string name="TVLogin">Login</string>
+    <string name="BTSignIn">Sign in</string>
+    <string name="TVNoACC">No Account? Sign up here.</string>
+    <string name="BTdatabase">Database</string>
+    <string name="TVRegister">Register</string>
+    <string name="BTRegister">Register</string>
+</resources>
