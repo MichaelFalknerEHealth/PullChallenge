@@ -40,6 +40,9 @@
             android:name=".Counter"
             android:exported="false" />
         <activity
+            android:name=".ChooserAndCounter"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>

@@ -45,10 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent3 = new Intent(getApplicationContext(),MainScreen.class);
         registerBtn.setPaintFlags(registerBtn.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message1");
-
-        myRef.setValue("test1");
 
 
         //method make password in-/visible

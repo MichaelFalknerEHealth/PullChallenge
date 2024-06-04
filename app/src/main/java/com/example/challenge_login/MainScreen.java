@@ -31,7 +31,7 @@ public class MainScreen extends AppCompatActivity {
         pull_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Chooser.class);
+                Intent intent = new Intent(getApplicationContext(), ChooserAndCounter.class);
                 //intent.putExtra("name",  name);
                //startActivity(intent);
                 startActivity(intent.putExtra("name",name));

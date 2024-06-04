@@ -22,6 +22,7 @@ public class Chooser extends AppCompatActivity {
     private DatabaseReference roomsRef;
     private EditText roomCodeInput;
     private TextView scoreView;
+    private TextView displayCode;
     private Button createRoomButton, joinRoomButton, updateScoreButton;
     private boolean isPlayer1;
 
@@ -36,6 +37,7 @@ public class Chooser extends AppCompatActivity {
         scoreView = findViewById(R.id.scoreView);
         createRoomButton = findViewById(R.id.createRoomButton);
         joinRoomButton = findViewById(R.id.joinRoomButton);
+        displayCode = findViewById(R.id.displaycode);
        // updateScoreButton = findViewById(R.id.updateScoreButton);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -58,6 +60,7 @@ public class Chooser extends AppCompatActivity {
                     roomCode[i]=comb.charAt(r.nextInt(comb.length()));
                 }
                 createRoom(new String(roomCode));
+                displayCode.setText("Code: "+ new String(roomCode));
             }
         });
 
@@ -111,11 +114,13 @@ public class Chooser extends AppCompatActivity {
         });
     }
 
-    private void updateScore(String roomCode, int score, boolean isPlayer1) {
+    /*private void updateScore(String roomCode, int score, boolean isPlayer1) {
         DatabaseReference roomRef = roomsRef.child(roomCode);
         String scoreKey = isPlayer1 ? "player1_score" : "player2_score";
         roomRef.child(scoreKey).setValue(score);
     }
+
+     */
 
     private void monitorScores(String roomCode) {
         DatabaseReference roomRef = roomsRef.child(roomCode);

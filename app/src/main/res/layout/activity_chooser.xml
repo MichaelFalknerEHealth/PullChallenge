@@ -30,6 +30,22 @@
         android:text="Update Score" />
 
     <TextView
+        android:id="@+id/displaycode"
+        android:layout_width="match_parent"
+        android:layout_height="127dp"
+        android:textSize="38sp"
+        android:text=""
+        android:gravity="center"
+        android:layout_gravity="center"
+        />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bereit" />
+
+    <TextView
         android:id="@+id/scoreView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
