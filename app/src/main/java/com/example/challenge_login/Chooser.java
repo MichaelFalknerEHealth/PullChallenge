@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Random;
+
 public class Chooser extends AppCompatActivity {
 
     private DatabaseReference roomsRef;
@@ -44,8 +46,18 @@ public class Chooser extends AppCompatActivity {
         createRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String roomCode = roomCodeInput.getText().toString();
-                createRoom(roomCode);
+                //String roomCode = roomCodeInput.getText().toString();
+                String upper ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                String lower = "abcdefghijklmnopqrstuvwxyz";
+                String number = "1234567890";
+                String comb = upper + lower + number;
+                int len = 4;
+                char [] roomCode = new char[len];
+                Random r = new Random();
+                for (int i=0;i<len;i++){
+                    roomCode[i]=comb.charAt(r.nextInt(comb.length()));
+                }
+                createRoom(new String(roomCode));
             }
         });
 
