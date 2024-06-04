@@ -48,9 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         String text = "No account? Sing up here.";
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        DatabaseReference myRef = database.getReference("message2");
 
-        myRef.setValue("Hello, World!");
+        myRef.setValue("test2");
 
 
         //method make password in-/visible

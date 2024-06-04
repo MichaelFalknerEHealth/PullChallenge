@@ -33,7 +33,7 @@ public class Chooser extends AppCompatActivity {
         scoreView = findViewById(R.id.scoreView);
         createRoomButton = findViewById(R.id.createRoomButton);
         joinRoomButton = findViewById(R.id.joinRoomButton);
-        updateScoreButton = findViewById(R.id.updateScoreButton);
+       // updateScoreButton = findViewById(R.id.updateScoreButton);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         roomsRef = database.getReference("rooms");
