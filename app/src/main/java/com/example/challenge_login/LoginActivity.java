@@ -27,8 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class LoginActivity extends AppCompatActivity {
     UserDatabase userDB;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +43,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent1 = new Intent(getApplicationContext(),RegisterClass.class);
         Intent intent2 = new Intent(getApplicationContext(),Admin.class);
         Intent intent3 = new Intent(getApplicationContext(),MainScreen.class);
-        String text = "No account? Sing up here.";
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message2");
+        DatabaseReference myRef = database.getReference("message1");
 
-        myRef.setValue("test2");
+        myRef.setValue("test1");
 
 
         //method make password in-/visible

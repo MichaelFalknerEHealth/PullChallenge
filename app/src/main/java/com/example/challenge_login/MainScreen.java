@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainScreen extends AppCompatActivity {
 
     TextView TVname;
-    Button push_up;
+    Button pull_up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +27,14 @@ public class MainScreen extends AppCompatActivity {
         TVname.setText(name);
 
 
-        push_up = findViewById(R.id.pull_up);
-        push_up.setOnClickListener(new View.OnClickListener() {
+        pull_up = findViewById(R.id.pull_up);
+        pull_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainScreen.this, Chooser.class);
-                intent.putExtra("name",  name);
-                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), Chooser.class);
+                //intent.putExtra("name",  name);
+               //startActivity(intent);
+                startActivity(intent.putExtra("name",name));
             }
         });
 

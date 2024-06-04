@@ -22,13 +22,14 @@ public class Chooser extends AppCompatActivity {
     private TextView scoreView;
     private Button createRoomButton, joinRoomButton, updateScoreButton;
     private boolean isPlayer1;
-    String user = getIntent().getStringExtra("name");
+
+   String user = "user1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooser);
-
+        user = getIntent().getStringExtra("name");
         roomCodeInput = findViewById(R.id.roomCodeInput);
         scoreView = findViewById(R.id.scoreView);
         createRoomButton = findViewById(R.id.createRoomButton);
@@ -56,13 +57,15 @@ public class Chooser extends AppCompatActivity {
             }
         });
 
-        updateScoreButton.setOnClickListener(new View.OnClickListener() {
+     /*   updateScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Example: update the score to 10 for the current player
                 updateScore(roomCodeInput.getText().toString(), 10, isPlayer1);
             }
         });
+      */
+
     }
 
     private void createRoom(String roomCode) {
