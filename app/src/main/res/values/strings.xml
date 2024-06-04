@@ -12,7 +12,8 @@
     <string name="bt_back">Speichern und zurück</string>
     <string name="TVLogin">Login</string>
     <string name="BTSignIn">Sign in</string>
-    <string name="TVNoACC">No Account? Sign up here.</string>
+    <string name="TVNoACC">No Account? Sign up</string>
+    <string name="TVNoACC2">here.</string>
     <string name="BTdatabase">Database</string>
     <string name="TVRegister">Register</string>
     <string name="BTRegister">Register</string>

@@ -1,6 +1,7 @@
 package com.example.challenge_login;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
@@ -36,13 +37,13 @@ public class LoginActivity extends AppCompatActivity {
         EditText ETUser = findViewById(R.id.etUser);
         EditText ETPass = findViewById(R.id.etPass);
         Button loginBtn = findViewById(R.id.loginBtn);
-        TextView registerBtn = findViewById(R.id.TVregister);
+        TextView registerBtn = findViewById(R.id.TVregister1);
         Button adminBtn = findViewById(R.id.adminBtn);
-        CheckBox CBshowPass = findViewById(R.id.CBshowPass);
         ImageButton IBvisibility = findViewById(R.id.IVvisible);
         Intent intent1 = new Intent(getApplicationContext(),RegisterClass.class);
         Intent intent2 = new Intent(getApplicationContext(),Admin.class);
         Intent intent3 = new Intent(getApplicationContext(),MainScreen.class);
+        registerBtn.setPaintFlags(registerBtn.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message1");
