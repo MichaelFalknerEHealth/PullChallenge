@@ -27,6 +27,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private DatabaseReference roomsRef;
     private EditText roomCodeInput;
     private TextView scoreView;
+    private TextView TVPlayerlist;
+    private TextView TVPlayerlist2;
+
     private TextView displayCode;
     private Button createRoomButton, joinRoomButton, okButton;
     private boolean isPlayer1;
@@ -55,6 +58,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         user = getIntent().getStringExtra("name");
         roomCodeInput = findViewById(R.id.roomCodeInput);
+        TVPlayerlist = findViewById(R.id.TVPlayerlist);
+        TVPlayerlist2 = findViewById(R.id.TVPlayerlist2);
+
         scoreView = findViewById(R.id.scoreView);
         displayCode = findViewById(R.id.displaycode);
         createRoomButton = findViewById(R.id.createRoomButton);
@@ -126,20 +132,24 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private void createRoom(String roomCode) {
         String userId = user;
         DatabaseReference roomRef = roomsRef.child(roomCode);
-        roomRef.child("player1").setValue(userId);
+        roomRef.child("Player 1").setValue(userId);
+        TVPlayerlist.setText("Player 1: " + userId);
         isPlayer1 = true;
         monitorScores(roomCode);
     }
 
     private void joinRoom(String roomCode) {
         String userId = user;
+        TVPlayerlist.setText("Player 1: " + userId);
+        TVPlayerlist2.setText("Player 2: " + userId);
+
         DatabaseReference roomRef = roomsRef.child(roomCode);
 
         roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChild("player1") && !snapshot.hasChild("player2")) {
-                    roomRef.child("player2").setValue(userId);
+                if (snapshot.exists() && snapshot.hasChild("Player 1") && !snapshot.hasChild("Player 2")) {
+                    roomRef.child("Player 2").setValue(userId);
                     isPlayer1 = false;
                     displayCode.setText(roomCode);
                     monitorScores(roomCode);
