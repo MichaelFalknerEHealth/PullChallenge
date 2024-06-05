@@ -20,6 +20,8 @@ public interface UserDAO {
     public void deleteUser (User user);
     @Query("Select * from user")
     public List<User> getAllUser();
+    @Query("SELECT user_score FROM user WHERE user_name = (:user_name)")
+    int getScoresByUsername(String user_name);
 
 @Query("Select * from user where user_name=(:user_name) and user_password=(:user_password)")
 User login(String user_name, String user_password);

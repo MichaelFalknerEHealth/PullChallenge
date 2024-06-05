@@ -193,7 +193,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     sensorManager.registerListener(ChooserAndCounter.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
                 }
             }
-        }, 5); // 5 seconds delay
+        }, 5000); // 5 seconds delay
     }
 
     private void monitorScores(String roomCode) {
