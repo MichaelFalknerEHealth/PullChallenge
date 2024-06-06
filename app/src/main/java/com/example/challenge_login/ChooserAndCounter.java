@@ -277,14 +277,23 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         int id = 0;
         String idString = Integer.toString(id);
         DatabaseReference roomRef2 = roomsRef2.child(username);
-        if() {
-            roomRef2.child(idString).setValue(pullUpCount + "-" + pullUpCount);
-        }else{
-            int newid = id+1;
-            String newidString = Integer.toString(newid);
-            roomRef2.child(newidString).setValue(pullUpCount + "-" + pullUpCount);
 
-        }
+        roomRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
+                    Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
+                    roomRef2.child(idString).setValue(player1Score + "-" + player2Score);
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Handle possible errors
+            }
+        });
+
     }
 
 
