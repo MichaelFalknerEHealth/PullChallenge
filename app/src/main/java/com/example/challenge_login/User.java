@@ -15,8 +15,7 @@ public class User {
     String uname;
     @ColumnInfo(name = "user_password")
     String password;
-    @ColumnInfo(name = "user_score")
-    int score;
+
 
 
 @Ignore
@@ -53,4 +52,6 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+
 }
