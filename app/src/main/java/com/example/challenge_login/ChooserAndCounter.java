@@ -25,13 +25,15 @@ import java.util.Random;
 public class ChooserAndCounter extends AppCompatActivity implements SensorEventListener {
 
     private DatabaseReference roomsRef;
+    private DatabaseReference roomsRef2;
+
     private EditText roomCodeInput;
     private TextView scoreView;
     private TextView TVPlayerlist;
     private TextView TVPlayerlist2;
 
     private TextView displayCode;
-    private Button createRoomButton, joinRoomButton, okButton;
+    private Button createRoomButton, joinRoomButton, okButton, BTSave;
     private boolean isPlayer1;
     private String user = "user1";
     private boolean isGravitationSet = false;
@@ -66,6 +68,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         createRoomButton = findViewById(R.id.createRoomButton);
         joinRoomButton = findViewById(R.id.joinRoomButton);
         okButton = findViewById(R.id.okButton);
+        BTSave = findViewById(R.id.BTSave);
 
         //Test
         text_gravitation = findViewById(R.id.gravitation);
@@ -73,6 +76,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         roomsRef = database.getReference("rooms");
+        roomsRef2 = database.getReference("History");
+
 
         createRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +102,13 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 checkAndStartCounter(displayCode.getText().toString());
             }
         });
+        BTSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveResultsToHistory();
+            }
+        });
+
 
         // Initialize sensor manager and accelerometer
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -258,6 +270,21 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             roomRef.child("player2_score").setValue(pullUpCount);
         }
         sensorManager.unregisterListener(this);
+    }
+
+    private void saveResultsToHistory() {
+        String username = user.toString();
+        int id = 0;
+        String idString = Integer.toString(id);
+        DatabaseReference roomRef2 = roomsRef2.child(username);
+        if() {
+            roomRef2.child(idString).setValue(pullUpCount + "-" + pullUpCount);
+        }else{
+            int newid = id+1;
+            String newidString = Integer.toString(newid);
+            roomRef2.child(newidString).setValue(pullUpCount + "-" + pullUpCount);
+
+        }
     }
 
 
