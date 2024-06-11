@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class ChooserAndCounter extends AppCompatActivity implements SensorEventListener {
@@ -41,6 +42,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private Sensor accelerometer;
     private boolean isMovingUp = false;
     private boolean isMovingDown = false;
+    public boolean onesave = true;
+    public Integer ID;
     private int pullUpCount = 0;
     private Handler handler = new Handler();
     private Runnable checkPullUpRunnable;
@@ -77,6 +80,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         roomsRef = database.getReference("rooms");
         roomsRef2 = database.getReference("History");
+
 
 
         createRoomButton.setOnClickListener(new View.OnClickListener() {
@@ -273,20 +277,27 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     }
 
     private void saveResultsToHistory() {
-        String username = user.toString();
-        int id = 0;
-        String idString = Integer.toString(id);
-        DatabaseReference roomRef2 = roomsRef2.child(username);
+        int test1 = 1;
+        int test2 = 2;
+        String IDString = "5";
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference roomRef2 = database.getReference("History");
 
-        roomRef2.addValueEventListener(new ValueEventListener() {
+        roomRef2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
-                    Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                    roomRef2.child(idString).setValue(player1Score + "-" + player2Score);
 
-                }
+                    if (snapshot.exists()) {
+                        Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
+                        Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
+                        roomRef2.child(IDString).setValue(player1Score + "-" + player2Score);
+
+
+
+                    }
+
+
+
             }
             @Override
             public void onCancelled(DatabaseError error) {
