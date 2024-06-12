@@ -277,9 +277,6 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     }
 
     private void saveResultsToHistory() {
-        int test1 = 1;
-        int test2 = 2;
-        String IDString = "5";
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference roomRef2 = database.getReference("History");
 
@@ -288,16 +285,23 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             public void onDataChange(DataSnapshot snapshot) {
 
                     if (snapshot.exists()) {
+
+                        int maxID = 0;
+                        for (DataSnapshot child : snapshot.getChildren()){
+                            int ID = Integer.parseInt(child.getKey());
+                            if(ID>maxID){
+                                maxID=ID;
+                            }
+                        }
+                        int newID = maxID+1;
                         Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                         Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                        roomRef2.child(IDString).setValue(player1Score + "-" + player2Score);
-
-
-
+                        roomRef2.child(String.valueOf(newID)).setValue(player1Score + "-" + player2Score);
+                    } else {
+                        Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
+                        Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
+                        roomRef2.child("1").setValue(player1Score + "-" + player2Score);
                     }
-
-
-
             }
             @Override
             public void onCancelled(DatabaseError error) {
