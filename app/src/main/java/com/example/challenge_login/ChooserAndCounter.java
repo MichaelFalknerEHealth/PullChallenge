@@ -27,12 +27,10 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
     private DatabaseReference roomsRef;
     private DatabaseReference roomsRef2;
-
     private EditText roomCodeInput;
     private TextView scoreView;
     private TextView TVPlayerlist;
     private TextView TVPlayerlist2;
-
     private TextView displayCode;
     private Button createRoomButton, joinRoomButton, okButton, BTSave;
     private boolean isPlayer1;
@@ -43,7 +41,6 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private boolean isMovingUp = false;
     private boolean isMovingDown = false;
     public boolean onesave = true;
-    public Integer ID;
     private int pullUpCount = 0;
     private Handler handler = new Handler();
     private Runnable checkPullUpRunnable;
@@ -296,11 +293,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                         int newID = maxID+1;
                         Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                         Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                        roomRef2.child(String.valueOf(newID)).setValue(player1Score + "-" + player2Score);
+                        roomRef2.child(String.valueOf(newID)).setValue(player1Score + "          -          " + player2Score);
                     } else {
                         Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                         Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                        roomRef2.child("1").setValue(player1Score + "-" + player2Score);
+                        roomRef2.child("1").setValue(player1Score + "          -          " + player2Score);
                     }
             }
             @Override

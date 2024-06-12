@@ -46,14 +46,14 @@ public class MainScreen extends AppCompatActivity {
         IVProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(getApplicationContext(),History.class);
+                Intent intent1 = new Intent(getApplicationContext(),Profile.class);
                 startActivity(intent1.putExtra("name",name));
             }
         });
         IVHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(),Profile.class);
+                Intent intent2 = new Intent(getApplicationContext(),History.class);
                 startActivity(intent2.putExtra("name",name));
             }
         });
