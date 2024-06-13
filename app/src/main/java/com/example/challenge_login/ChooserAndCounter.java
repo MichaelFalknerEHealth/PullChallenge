@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private DatabaseReference roomsRef2;
     private EditText roomCodeInput;
     private TextView scoreView;
+    private TextView TVCountdown;
     private TextView TVPlayerlist;
     private TextView TVPlayerlist2;
     private TextView displayCode;
@@ -62,6 +64,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         roomCodeInput = findViewById(R.id.roomCodeInput);
         TVPlayerlist = findViewById(R.id.TVPlayerlist);
         TVPlayerlist2 = findViewById(R.id.TVPlayerlist2);
+        TVCountdown = findViewById(R.id.TVCountdown);
 
         scoreView = findViewById(R.id.scoreView);
         displayCode = findViewById(R.id.displaycode);
@@ -102,6 +105,16 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TVCountdown.setVisibility((View.VISIBLE));
+                new CountDownTimer(3000,1000);
+                public void onTick(int millisUntilFinished) {
+                    TVCountdown.setText(millisUntilFinished / 1000);
+                }
+                public void onFinish(){
+                    checkAndStartCounter(displayCode.getText().toString());
+
+                }
+
                 checkAndStartCounter(displayCode.getText().toString());
             }
         });
@@ -208,7 +221,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     sensorManager.registerListener(ChooserAndCounter.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
                 }
             }
-        }, 5000); // 5 seconds delay
+        }, 3000); // 3 seconds delay
     }
 
     private void monitorScores(String roomCode) {
@@ -257,7 +270,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     isMovingUp = false;
                     counter.setText(pullUpCount + " " + getString(R.string.pullup));
                     handler.removeCallbacks(checkPullUpRunnable);
-                    handler.postDelayed(checkPullUpRunnable, 3000); // 3 seconds delay
+                    handler.postDelayed(checkPullUpRunnable, 5000); // 5 seconds delay
                 }
             }
         }
