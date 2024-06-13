@@ -23,6 +23,7 @@
         android:textSize="30dp"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="What can we do for you?"/>
+        android:text="What can we do for you,"/>
+
 
 </RelativeLayout>

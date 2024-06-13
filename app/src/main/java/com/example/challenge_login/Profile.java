@@ -18,6 +18,6 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         TextView TVName = findViewById(R.id.TVName);
         String user = getIntent().getStringExtra("name");
-        TVName.setText(user);
+        TVName.setText(user + "?");
     }
 }

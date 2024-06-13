@@ -14,7 +14,7 @@
         android:textSize="35sp"
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
-        android:layout_margin="50dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:id="@+id/TVwelcome"
         android:layout_height="wrap_content"/>
@@ -24,9 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/TVwelcome"
-        android:layout_margin="50dp"
-        android:layout_marginTop="61dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:text="name"
         android:textColor="@color/black"
@@ -42,17 +40,15 @@
         android:layout_width="177dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/TVname"
-        android:text="Pull Up Challenge"
+        android:text="Get Started!"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:layout_alignParentBottom="true">
-
-
 
         <ImageView
             android:id="@+id/IVProfile"
@@ -70,7 +66,6 @@
             android:layout_gravity="end"
             android:layout_marginLeft="50dp"
             android:src="@drawable/baseline_backup_24" />
-
 
     </RelativeLayout>
 
