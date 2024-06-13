@@ -8,11 +8,21 @@
     tools:context=".Profile">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/TVName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="248dp"
-        tools:layout_editor_absoluteY="180dp" />
+        android:layout_below="@id/TVHello"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="filler"/>
+    <TextView
+        android:id="@+id/TVHello"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="What can we do for you?"/>
 
 </RelativeLayout>

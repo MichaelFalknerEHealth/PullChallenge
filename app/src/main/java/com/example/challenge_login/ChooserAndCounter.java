@@ -106,14 +106,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void onClick(View v) {
                 TVCountdown.setVisibility((View.VISIBLE));
-                new CountDownTimer(3000,1000);
-                public void onTick(int millisUntilFinished) {
-                    TVCountdown.setText(millisUntilFinished / 1000);
-                }
-                public void onFinish(){
-                    checkAndStartCounter(displayCode.getText().toString());
+                   // TVCountdown.setText(millisUntilFinished / 1000);
 
-                }
+
 
                 checkAndStartCounter(displayCode.getText().toString());
             }
@@ -253,7 +248,6 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 gravitation = event.values[1];
                 isGravitationSet = true;
                 text_gravitation.setText(getString(R.string.gravitation) + " " + gravitation + " " + getString(R.string.geschwindigkeit));
-
             }
 
 
@@ -319,7 +313,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                         int player1ScoreValue = player1Score != null ? player1Score : 0;
                         int player2ScoreValue = player2Score != null ? player2Score : 0;
 
-                        roomRef3.child(String.valueOf(newID)).setValue(player1ScoreValue + " - " + player2ScoreValue);
+                        roomRef3.child(String.valueOf(newID)).setValue(player1ScoreValue + "          -          " + player2ScoreValue);
                     } else {
                         Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                         Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);

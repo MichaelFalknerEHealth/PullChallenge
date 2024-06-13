@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class History extends AppCompatActivity {
 
-    private String user = "user1";
+    private String user;
 
 
 
@@ -35,11 +35,12 @@ public class History extends AppCompatActivity {
         TextView TVHistory = findViewById(R.id.TVHistory2);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference roomsRef2 = database.getReference("History");
+        DatabaseReference roomsRef3 = database.getReference("History").child(user);
 
-        roomsRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+        roomsRef3.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Iteriere durch alle Kinder der Referenz und gib ihre Werte aus
                     String key = snapshot.getKey(); // Schlüssel des Eintrags
@@ -49,7 +50,9 @@ public class History extends AppCompatActivity {
                     String formattedText = String.format("MatchID: %s\nErgebnis: %s\n\n", key, value.toString());
 
                     TVHistory.append(formattedText);
-
+                }
+                } else {
+                    TVHistory.setText("No Data found for user: " + user);
                 }
             }
 
