@@ -41,7 +41,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private boolean isMovingUp = false;
     private boolean isMovingDown = false;
     public boolean onesave = true;
-    private int pullUpCount = 0;
+    private int pullUpCount;
     private Handler handler = new Handler();
     private Runnable checkPullUpRunnable;
 
@@ -73,6 +73,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         //Test
         text_gravitation = findViewById(R.id.gravitation);
         counter = findViewById(R.id.counter);
+
+        pullUpCount = 0;
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         roomsRef = database.getReference("rooms");
@@ -218,7 +220,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 if (snapshot.exists()) {
                     Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                     Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                    scoreView.setText("Player 1: " + player1Score + "\nPlayer 2: " + player2Score);
+                    int player1ScoreValue = player1Score != null ? player1Score : 0;
+                    int player2ScoreValue = player2Score != null ? player2Score : 0;
+                    scoreView.setText("Player 1: " + player1ScoreValue + "\nPlayer 2: " + player2ScoreValue);
                 }
             }
 
@@ -238,6 +242,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 text_gravitation.setText(getString(R.string.gravitation) + " " + gravitation + " " + getString(R.string.geschwindigkeit));
 
             }
+
+
 
 
             float zAxis = event.values[1];
@@ -266,9 +272,10 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);
         if (isPlayer1) {
-            roomRef.child("player1_score").setValue(pullUpCount);
-        } else {
-            roomRef.child("player2_score").setValue(pullUpCount);
+                roomRef.child("player1_score").setValue(pullUpCount);
+            }
+        else {
+                roomRef.child("player2_score").setValue(pullUpCount);
         }
         sensorManager.unregisterListener(this);
     }
@@ -276,8 +283,10 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private void saveResultsToHistory() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference roomRef2 = database.getReference("History");
+        DatabaseReference roomRef3 = roomRef2.child(user);
 
-        roomRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        roomRef3.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
@@ -293,11 +302,18 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                         int newID = maxID+1;
                         Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                         Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                        roomRef2.child(String.valueOf(newID)).setValue(player1Score + "          -          " + player2Score);
+
+                        int player1ScoreValue = player1Score != null ? player1Score : 0;
+                        int player2ScoreValue = player2Score != null ? player2Score : 0;
+
+                        roomRef3.child(String.valueOf(newID)).setValue(player1ScoreValue + " - " + player2ScoreValue);
                     } else {
                         Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
                         Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                        roomRef2.child("1").setValue(player1Score + "          -          " + player2Score);
+
+                        int player1ScoreValue = player1Score != null ? player1Score : 0;
+                        int player2ScoreValue = player2Score != null ? player2Score : 0;
+                        roomRef3.child("1").setValue(player1ScoreValue + "          -          " + player2ScoreValue);
                     }
             }
             @Override
