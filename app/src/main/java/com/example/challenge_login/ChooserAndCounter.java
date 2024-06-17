@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +32,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private DatabaseReference roomsRef2;
     private EditText roomCodeInput;
     private TextView scoreView;
+    private TextView scoreViewPlayer2;
     private TextView TVCountdown;
     private TextView TVPlayerlist;
     private TextView TVPlayerlist2;
@@ -46,6 +49,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private int pullUpCount;
     private Handler handler = new Handler();
     private Runnable checkPullUpRunnable;
+
+    private MediaPlayer mediaPlayer;
 
     //Tests
 
@@ -67,11 +72,15 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         TVCountdown = findViewById(R.id.TVCountdown);
 
         scoreView = findViewById(R.id.scoreView);
+        scoreViewPlayer2 = findViewById(R.id.scoreViewPlayer2);
         displayCode = findViewById(R.id.displaycode);
         createRoomButton = findViewById(R.id.createRoomButton);
         joinRoomButton = findViewById(R.id.joinRoomButton);
         okButton = findViewById(R.id.okButton);
         BTSave = findViewById(R.id.BTSave);
+
+        //Media Players bzw. Sounds
+
 
         //Test
         text_gravitation = findViewById(R.id.gravitation);
@@ -105,12 +114,28 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TVCountdown.setVisibility((View.VISIBLE));
-                   // TVCountdown.setText(millisUntilFinished / 1000);
+                TVCountdown.setVisibility(View.VISIBLE); // Mache TVCountdown sichtbar
 
+                // Countdown von 3 herunterzählen
+                new CountDownTimer(3000, 1000) { // 3000 Millisekunden (3 Sekunden), 1000 Millisekunden (1 Sekunde Intervall)
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        long secondsRemaining = (millisUntilFinished / 1000)+1;
+                        TVCountdown.setText(String.valueOf(secondsRemaining));
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
+                        // Hier Sound abspielen
+                        mediaPlayer.start();
+                    }
 
-
-                checkAndStartCounter(displayCode.getText().toString());
+                    @Override
+                    public void onFinish() {
+                        TVCountdown.setText("START!"); // Countdown abgeschlossen, zeige "GO!"
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.start);
+                        mediaPlayer.start();
+                        // Hier die Methode aufrufen, um den Counter zu starten
+                        checkAndStartCounter(displayCode.getText().toString());
+                    }
+                }.start(); // Starte den Countdown
             }
         });
         BTSave.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +180,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private void createRoom(String roomCode) {
         String userId = user;
         DatabaseReference roomRef = roomsRef.child(roomCode);
-        roomRef.child("Player 1").setValue(userId);
+        roomRef.child("Player 1").child(userId).child("player1_score").setValue(0);
         TVPlayerlist.setText("Player 1: " + userId);
         isPlayer1 = true;
         monitorScores(roomCode);
@@ -163,7 +188,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
     private void joinRoom(String roomCode) {
         String userId = user;
-        TVPlayerlist.setText("Player 1: " + userId);
+
         TVPlayerlist2.setText("Player 2: " + userId);
 
         DatabaseReference roomRef = roomsRef.child(roomCode);
@@ -172,12 +197,13 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.hasChild("Player 1") && !snapshot.hasChild("Player 2")) {
-                    roomRef.child("Player 2").setValue(userId);
+                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
                     isPlayer1 = false;
                     displayCode.setText(roomCode);
                     monitorScores(roomCode);
 
                 } else {
+                    Toast.makeText(getApplicationContext(), "Room does not exist or already has two players", Toast.LENGTH_SHORT).show();
                     // Handle errors, like room does not exist or already has two players
                 }
             }
@@ -194,10 +220,10 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChild("player1") && snapshot.hasChild("player2")) {
+                if (snapshot.exists() && snapshot.hasChild("Player 1") && snapshot.hasChild("Player 2")) {
                     startCounting();
                 } else {
-                    // Handle errors, like room does not have both players yet
+                    Toast.makeText(getApplicationContext(), "Die Runde wird nicht gestartet, da nur ein Spieler beigetreten ist.", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -214,9 +240,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             public void run() {
                 if (accelerometer != null) {
                     sensorManager.registerListener(ChooserAndCounter.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
                 }
             }
-        }, 3000); // 3 seconds delay
+        }, 0);// 0 seconds delay
+
     }
 
     private void monitorScores(String roomCode) {
@@ -226,11 +254,31 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
-                    Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-                    int player1ScoreValue = player1Score != null ? player1Score : 0;
-                    int player2ScoreValue = player2Score != null ? player2Score : 0;
-                    scoreView.setText("Player 1: " + player1ScoreValue + "\nPlayer 2: " + player2ScoreValue);
+                    if (snapshot.hasChild("Player 1")) {
+                        DataSnapshot player1Snapshot = snapshot.child("Player 1");
+                        for (DataSnapshot childSnapshot : player1Snapshot.getChildren()) {
+                            String playerName = childSnapshot.getKey();
+                            if (childSnapshot.hasChild("player1_score")) {
+                                Integer player1Score = childSnapshot.child("player1_score").getValue(Integer.class);
+                                int player1ScoreValue = player1Score != null ? player1Score : 17;
+                                scoreView.setText("Player 1 (" + playerName + "): " + player1ScoreValue);
+                            }
+                        }
+
+                    }
+                    if (snapshot.hasChild("Player 2")) {
+                        DataSnapshot player2Snapshot = snapshot.child("Player 2");
+                        for (DataSnapshot childSnapshot : player2Snapshot.getChildren()) {
+                            String playerName = childSnapshot.getKey();
+                            if (childSnapshot.hasChild("player2_score")) {
+                                Integer player2Score = childSnapshot.child("player2_score").getValue(Integer.class);
+                                int player2ScoreValue = player2Score != null ? player2Score : 0;
+                                scoreViewPlayer2.setText("Player 2 (" + playerName + "): " + player2ScoreValue);
+                            }
+                        }
+                    }
+
+
                 }
             }
 
@@ -247,24 +295,29 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             if (!isGravitationSet) {
                 gravitation = event.values[1];
                 isGravitationSet = true;
+                //Ein Text für Überprüfungszwecke
                 text_gravitation.setText(getString(R.string.gravitation) + " " + gravitation + " " + getString(R.string.geschwindigkeit));
             }
 
 
-
-
             float zAxis = event.values[1];
-            if (zAxis > 10.0f && !isMovingUp) {
-                isMovingUp = true;
-                isMovingDown = false;
-            } else if (zAxis < 8.0f && !isMovingDown) {
-                isMovingDown = true;
-                if (isMovingUp) {
-                    pullUpCount++;
-                    isMovingUp = false;
-                    counter.setText(pullUpCount + " " + getString(R.string.pullup));
-                    handler.removeCallbacks(checkPullUpRunnable);
-                    handler.postDelayed(checkPullUpRunnable, 5000); // 5 seconds delay
+            if (zAxis > (gravitation - 1)) {
+                if (!isMovingUp) {
+                    isMovingUp = true;
+                    isMovingDown = false;
+
+                }
+            } else if (zAxis < (gravitation + 1)) {
+                if (!isMovingDown) {
+                    isMovingDown = true;
+                    if (isMovingUp) {
+                        pullUpCount++;
+                        isMovingUp = false;
+                        counter.setText(pullUpCount + " " + getString(R.string.pullup));
+                        // Timer zurücksetzen, wenn ein Klimmzug bzw. Pull Up erkannt wurde
+                        handler.removeCallbacks(checkPullUpRunnable);
+                        handler.postDelayed(checkPullUpRunnable, 3000); // 3 Sekunden Verzögerung
+                    }
                 }
             }
         }
@@ -279,50 +332,79 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);
         if (isPlayer1) {
-                roomRef.child("player1_score").setValue(pullUpCount);
+                roomRef.child(user).child("player1_score").setValue(pullUpCount);
             }
         else {
-                roomRef.child("player2_score").setValue(pullUpCount);
+            roomRef.child(user).child("player2_score").setValue(pullUpCount);
         }
         sensorManager.unregisterListener(this);
     }
 
     private void saveResultsToHistory() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference roomRef2 = database.getReference("History");
-        DatabaseReference roomRef3 = roomRef2.child(user);
-
-
-        roomRef3.addListenerForSingleValueEvent(new ValueEventListener() {
+        String roomCode = displayCode.getText().toString();
+        DatabaseReference roomRef = roomsRef.child(roomCode);
+        Integer player1Score = null;
+        Integer player2Score = null;
+        roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                Integer player1Score = null;
+                Integer player2Score = null;
+                if (snapshot.exists()) {
+                    // Erhalte die aktuellen Spielergebnisse
+                    if (snapshot.hasChild("Player 1")) {
+                        DataSnapshot player1Snapshot = snapshot.child("Player 1");
+                        for (DataSnapshot childSnapshot : player1Snapshot.getChildren()) {
+                            String playerName = childSnapshot.getKey();
+                            player1Score = snapshot.child("Player 1").child(playerName).child("player1_score").getValue(Integer.class);
+                        }
 
-                    if (snapshot.exists()) {
+                    }
+                    if (snapshot.hasChild("Player 2")) {
+                        DataSnapshot player2Snapshot = snapshot.child("Player 2");
+                        for (DataSnapshot childSnapshot : player2Snapshot.getChildren()) {
+                            String player2Name = childSnapshot.getKey();
+                            player2Score = snapshot.child("Player 2").child(player2Name).child("player2_score").getValue(Integer.class);
+                        }
 
-                        int maxID = 0;
-                        for (DataSnapshot child : snapshot.getChildren()){
-                            int ID = Integer.parseInt(child.getKey());
-                            if(ID>maxID){
-                                maxID=ID;
+                    }
+
+
+
+                    // Standardwerte, falls keine Ergebnisse gefunden wurden
+                    int player1ScoreValue = player1Score != null ? player1Score : 0;
+                    int player2ScoreValue = player2Score != null ? player2Score : 0;
+
+                    // Speichere die aktuellen Spielergebnisse in der History
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference historyRef = database.getReference("History").child(user);
+
+                    historyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                int maxID = 0;
+                                for (DataSnapshot child : snapshot.getChildren()) {
+                                    int ID = Integer.parseInt(child.getKey());
+                                    if (ID > maxID) {
+                                        maxID = ID;
+                                    }
+                                }
+                                int newID = maxID + 1;
+                                historyRef.child(String.valueOf(newID)).setValue(player1ScoreValue + " - " + player2ScoreValue);
+                            } else {
+                                historyRef.child("1").setValue(player1ScoreValue + " - " + player2ScoreValue);
                             }
                         }
-                        int newID = maxID+1;
-                        Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
-                        Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
 
-                        int player1ScoreValue = player1Score != null ? player1Score : 0;
-                        int player2ScoreValue = player2Score != null ? player2Score : 0;
-
-                        roomRef3.child(String.valueOf(newID)).setValue(player1ScoreValue + "          -          " + player2ScoreValue);
-                    } else {
-                        Integer player1Score = snapshot.child("player1_score").getValue(Integer.class);
-                        Integer player2Score = snapshot.child("player2_score").getValue(Integer.class);
-
-                        int player1ScoreValue = player1Score != null ? player1Score : 0;
-                        int player2ScoreValue = player2Score != null ? player2Score : 0;
-                        roomRef3.child("1").setValue(player1ScoreValue + "          -          " + player2ScoreValue);
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Handle possible errors
+                        }
+                    });
+                }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Handle possible errors
