@@ -254,13 +254,17 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    Integer player1Score = null;
+                    Integer player2Score = null;
+                    int player1ScoreValue;
+                    int player2ScoreValue;
                     if (snapshot.hasChild("Player 1")) {
                         DataSnapshot player1Snapshot = snapshot.child("Player 1");
                         for (DataSnapshot childSnapshot : player1Snapshot.getChildren()) {
                             String playerName = childSnapshot.getKey();
                             if (childSnapshot.hasChild("player1_score")) {
-                                Integer player1Score = childSnapshot.child("player1_score").getValue(Integer.class);
-                                int player1ScoreValue = player1Score != null ? player1Score : 17;
+                                player1Score = childSnapshot.child("player1_score").getValue(Integer.class);
+                                player1ScoreValue = player1Score != null ? player1Score : 17;
                                 scoreView.setText("Player 1 (" + playerName + "): " + player1ScoreValue);
                             }
                         }
@@ -271,14 +275,20 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                         for (DataSnapshot childSnapshot : player2Snapshot.getChildren()) {
                             String playerName = childSnapshot.getKey();
                             if (childSnapshot.hasChild("player2_score")) {
-                                Integer player2Score = childSnapshot.child("player2_score").getValue(Integer.class);
-                                int player2ScoreValue = player2Score != null ? player2Score : 0;
+                                player2Score = childSnapshot.child("player2_score").getValue(Integer.class);
+                                player2ScoreValue = player2Score != null ? player2Score : 0;
                                 scoreViewPlayer2.setText("Player 2 (" + playerName + "): " + player2ScoreValue);
                             }
                         }
                     }
 
+                    if (player1Score != null && player1Score != 0 && player2Score != null && player2Score != 0) {
+                        TVCountdown.setText(player1Score + "  -  " + player2Score);
 
+
+                        // Ergebnisse in Firebase speichern, wenn beide Scores vorhanden sind
+                        saveResultsToHistory();
+                    }
                 }
             }
 
@@ -332,10 +342,10 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);
         if (isPlayer1) {
-                roomRef.child(user).child("player1_score").setValue(pullUpCount);
+                roomRef.child("Player 1").child(user).child("player1_score").setValue(pullUpCount);
             }
         else {
-            roomRef.child(user).child("player2_score").setValue(pullUpCount);
+            roomRef.child("Player 2").child(user).child("player2_score").setValue(pullUpCount);
         }
         sensorManager.unregisterListener(this);
     }
