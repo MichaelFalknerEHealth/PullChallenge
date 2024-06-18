@@ -14,16 +14,20 @@
     <Button
         android:id="@+id/createRoomButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:backgroundTint="#00BCD4"
-        android:text="Create Room" />
+        android:text="Create Room"
+        android:layout_height="60dp"
+        android:textSize="30sp"
+        />
 
     <Button
         android:id="@+id/joinRoomButton"
         android:backgroundTint="#00BCD4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Join Room" />
+        android:text="Join Room"
+        android:layout_height="60dp"
+        android:textSize="30sp"
+        />
 
     <TextView
         android:id="@+id/displaycode"
@@ -38,35 +42,42 @@
         android:id="@+id/okButton"
         android:backgroundTint="#00BCD4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bereit" />
+        android:text="Starten"
+        android:layout_height="75dp"
+        android:textSize="38sp"/>
 
     <Button
         android:id="@+id/BTSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="save" />
+        android:text="save"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/gravitation"
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:textSize="18sp"
-        android:text="@string/gravitation" />
+        android:text="@string/gravitation"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/counter"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:text="0"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/scoreView"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:text="Scores will be displayed here"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/scoreViewPlayer2"
@@ -74,23 +85,24 @@
         android:layout_height="25dp"
         android:text="Scores of P2 will be displayed here"
         android:textSize="18sp"
+        android:visibility="gone"
         />
 
     <TextView
         android:id="@+id/TVPlayerlist"
-        android:gravity="center"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:text="Player 1:"
-        android:textSize="18sp" />
+        android:textSize="38sp" />
     <TextView
         android:id="@+id/TVPlayerlist2"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="50dp"
         android:gravity="center"
         android:text="Player 2:"
-        android:textSize="18sp" />
+        android:textSize="38sp" />
 
     <TextView
         android:id="@+id/TVCountdown"
@@ -99,5 +111,14 @@
         android:gravity="center"
         android:text="Countdown"
         android:textSize="40dp" />
+
+    <Button
+        android:id="@+id/BTBack"
+        android:layout_width="175dp"
+        android:backgroundTint="#00BCD4"
+        android:text="Back"
+        android:layout_height="60dp"
+        android:textSize="30sp"
+        />
 
 </LinearLayout>

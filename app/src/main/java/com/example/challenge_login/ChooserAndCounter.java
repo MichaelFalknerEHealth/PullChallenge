@@ -52,6 +52,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
     private MediaPlayer mediaPlayer;
 
+    private Button BTBack;
+
     //Tests
 
     private TextView text_gravitation;
@@ -78,6 +80,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         joinRoomButton = findViewById(R.id.joinRoomButton);
         okButton = findViewById(R.id.okButton);
         BTSave = findViewById(R.id.BTSave);
+        BTBack = findViewById(R.id.BTBack);
 
         //Media Players bzw. Sounds
 
@@ -124,8 +127,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     public void onTick(long millisUntilFinished) {
                         TVCountdown.setText(String.valueOf(seconds));
                         seconds=seconds-1;
-                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
                         // Hier Sound abspielen
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
                         mediaPlayer.start();
                     }
 
@@ -147,6 +150,15 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             }
         });
 
+        BTBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+
+
+            }
+        });
+
 
         // Initialize sensor manager and accelerometer
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -156,6 +168,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void run() {
                 saveResultsToFirebase();
+                // Hier Sound abspielen
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ende);
+                mediaPlayer.start();
 
                 // You can also transition to another activity or screen here if needed
             }
@@ -183,7 +198,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private void createRoom(String roomCode) {
         String userId = user;
         DatabaseReference roomRef = roomsRef.child(roomCode);
-        roomRef.child("Player 1").child(userId).child("player1_score").setValue(0);
+        roomRef.child("Player 1").child(userId).child("player1_score").setValue(6);
         TVPlayerlist.setText("Player 1: " + userId);
         isPlayer1 = true;
         monitorScores(roomCode);
@@ -200,7 +215,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.hasChild("Player 1") && !snapshot.hasChild("Player 2")) {
-                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
+                    //Normal
+                    //roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
+
+                    //Test mit der Variable 7
+                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(7);
                     isPlayer1 = false;
                     displayCode.setText(roomCode);
                     monitorScores(roomCode);
@@ -267,7 +286,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                             String playerName = childSnapshot.getKey();
                             if (childSnapshot.hasChild("player1_score")) {
                                 player1Score = childSnapshot.child("player1_score").getValue(Integer.class);
-                                player1ScoreValue = player1Score != null ? player1Score : 17;
+                                player1ScoreValue = player1Score != null ? player1Score : 0;
                                 scoreView.setText("Player 1 (" + playerName + "): " + player1ScoreValue);
                             }
                         }
@@ -286,11 +305,31 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     }
 
                     if (player1Score != null && player1Score != 0 && player2Score != null && player2Score != 0) {
-                        TVCountdown.setText(player1Score + "  -  " + player2Score);
+                        if (isPlayer1){
+                            if (player1Score>player2Score){
+                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n Gewonnen!");
+                            }else if(player2Score>player1Score){
+                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n Verloren!");
+                            }else{
+                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n Unentschieden!");
+                            }
+
+                        }else{
+                            if (player1Score<player2Score){
+                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n Gewonnen!");
+                            }else if(player2Score<player1Score){
+                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n Verloren!");
+                            }else{
+                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n Unentschieden!");
+                            }
+
+                        }
 
 
                         // Ergebnisse in Firebase speichern, wenn beide Scores vorhanden sind
                         saveResultsToHistory();
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.game_over);
+                        mediaPlayer.start();
                     }
                 }
             }
@@ -326,7 +365,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     if (isMovingUp) {
                         pullUpCount++;
                         isMovingUp = false;
-                        counter.setText(pullUpCount + " " + getString(R.string.pullup));
+                        TVCountdown.setText(pullUpCount + " " + getString(R.string.pullup));
+
                         // Timer zurücksetzen, wenn ein Klimmzug bzw. Pull Up erkannt wurde
                         handler.removeCallbacks(checkPullUpRunnable);
                         handler.postDelayed(checkPullUpRunnable, 3000); // 3 Sekunden Verzögerung
@@ -404,9 +444,13 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                                     }
                                 }
                                 int newID = maxID + 1;
-                                historyRef.child(String.valueOf(newID)).setValue(player1ScoreValue + " - " + player2ScoreValue);
+                                if (isPlayer1){
+                                historyRef.child(String.valueOf(newID)).setValue(player1ScoreValue + " - " + player2ScoreValue);}
+                                else{historyRef.child(String.valueOf(newID)).setValue(player2ScoreValue + " - " + player1ScoreValue);}
                             } else {
-                                historyRef.child("1").setValue(player1ScoreValue + " - " + player2ScoreValue);
+                                if(isPlayer1){
+                                historyRef.child("1").setValue(player1ScoreValue + " - " + player2ScoreValue);}
+                                else{historyRef.child("1").setValue(player2ScoreValue + " - " + player1ScoreValue);}
                             }
                         }
 

@@ -2,6 +2,8 @@ package com.example.challenge_login;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 public class History extends AppCompatActivity {
 
     private String user;
+    private Button BTBack;
 
 
 
@@ -29,6 +32,17 @@ public class History extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         user = getIntent().getStringExtra("name");
         readDataFromFirebase();
+
+
+        Button BTBack = findViewById(R.id.BTBack);
+
+        BTBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+
+            }
+        });
 
     }
     private void readDataFromFirebase() {
