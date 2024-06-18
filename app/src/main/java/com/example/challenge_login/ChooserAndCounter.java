@@ -118,10 +118,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
                 // Countdown von 3 herunterzählen
                 new CountDownTimer(3000, 1000) { // 3000 Millisekunden (3 Sekunden), 1000 Millisekunden (1 Sekunde Intervall)
+                    int seconds = 3;
+
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        long secondsRemaining = (millisUntilFinished / 1000)+1;
-                        TVCountdown.setText(String.valueOf(secondsRemaining));
+                        TVCountdown.setText(String.valueOf(seconds));
+                        seconds=seconds-1;
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
                         // Hier Sound abspielen
                         mediaPlayer.start();
@@ -154,6 +156,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void run() {
                 saveResultsToFirebase();
+
                 // You can also transition to another activity or screen here if needed
             }
         };
