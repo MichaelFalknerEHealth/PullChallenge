@@ -23,6 +23,8 @@ public interface UserDAO {
 
     @Query("Select * from user where user_name=(:user_name) and user_password=(:user_password)")
     User login(String user_name, String user_password);
+    @Query("SELECT * FROM user WHERE user_name = :username LIMIT 1")
+    User getUserByUsername(String username);
 
 
 }
