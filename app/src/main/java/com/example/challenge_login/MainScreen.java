@@ -37,7 +37,7 @@ public class MainScreen extends AppCompatActivity {
             Uri ImageUri = Uri.parse(ImageUriString);
             IVPic.setImageURI(ImageUri);
         }else{
-            Toast.makeText(MainScreen.this,"No profile picture found", Toast.LENGTH_SHORT);
+            Toast.makeText(MainScreen.this,getString(R.string.profile_pic), Toast.LENGTH_SHORT);
         }
         TVname.setText(name+ "!");
 

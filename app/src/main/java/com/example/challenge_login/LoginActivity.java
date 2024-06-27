@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //to check if all fields are filled
                 if(uname.isEmpty() || password.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"fill in all fields",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.fields),Toast.LENGTH_LONG).show();
                 }else {
                     //Perform Query
                     userDB = UserDatabase.getUserDatabase(getApplicationContext());
@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getApplicationContext(),"check password",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),getString(R.string.pasword_check),Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }else{

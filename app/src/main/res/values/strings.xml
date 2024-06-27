@@ -11,9 +11,9 @@
     <string name="start">Start</string>
     <string name="bt_back">Speichern und zurück</string>
     <string name="TVLogin">Login</string>
-    <string name="BTSignIn">Sign in</string>
-    <string name="TVNoACC">No Account? Sign up</string>
-    <string name="TVNoACC2">here.</string>
+    <string name="BTSignIn">Einloggen</string>
+    <string name="TVNoACC">Kein Account? Anmelden</string>
+    <string name="TVNoACC2">hier.</string>
     <string name="BTdatabase">Database</string>
     <string name="TVRegister">Register</string>
     <string name="BTRegister">Register</string>
@@ -39,6 +39,20 @@
     <string name="create_room">Raum erstellen</string>
     <string name="join_room">Raum beitreten</string>
     <string name="room_code">Raum Code eingeben zum beitreten</string>
-    <string name="welcome">Wilkommen</string>
+    <string name="welcome">Wilkommen,</string>
+    <string name="picture_choose">Bild auswählen</string>
+    <string name="picture_rec">Bild aufnehmen oder von Galerie auswählen</string>
+    <string name="recording">Bild aufnehmen</string>
+    <string name="gallery">Von Gallerie auswählen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="no_pic">Kein Bild ausgewählt</string>
+    <string name="no_photo">Kein Foto gemacht</string>
+    <string name="camerea_perm">Kamerazugriff muss erlaubt werden</string>
+    <string name="fields">Alle Felder ausfüllen!</string>
+    <string name="pasword_check">Passwort überprüfen</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="profile_pic">Kein Profilbild gefunden</string>
+    <string name="new_match">Neues Match</string>
 
 </resources>

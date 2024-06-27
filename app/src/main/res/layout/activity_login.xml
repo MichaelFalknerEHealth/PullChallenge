@@ -22,7 +22,7 @@
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/etUser"
-        android:hint="Username"
+        android:hint="@string/username"
         android:textColorHint="@color/black"
         android:padding="20dp"
         android:layout_margin="10dp"
@@ -46,7 +46,7 @@
         android:background="@color/white"
         android:drawableLeft="@drawable/lock_24px"
         android:drawablePadding="10dp"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:padding="20dp"
         android:textColorHint="@color/black" />

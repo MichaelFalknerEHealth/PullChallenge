@@ -134,9 +134,9 @@ public class Profile extends AppCompatActivity {
 
     public void showDecisionDialog(){
         AlertDialog.Builder decisionDialBuilder = new AlertDialog.Builder(this);
-        decisionDialBuilder.setTitle("Choose Picture");
-        decisionDialBuilder.setMessage("Take a picture or choose from gallery");
-        decisionDialBuilder.setPositiveButton("take a picture", new DialogInterface.OnClickListener() {
+        decisionDialBuilder.setTitle(getString(R.string.picture_choose));
+        decisionDialBuilder.setMessage(getString(R.string.picture_rec));
+        decisionDialBuilder.setPositiveButton(getString(R.string.recording), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (ActivityCompat.checkSelfPermission(Profile.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -147,13 +147,13 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-        decisionDialBuilder.setNegativeButton("choose from gallery", new DialogInterface.OnClickListener() {
+        decisionDialBuilder.setNegativeButton(getString(R.string.gallery), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 pickImage();
             }
         });
-        decisionDialBuilder.setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+        decisionDialBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -180,7 +180,7 @@ public class Profile extends AppCompatActivity {
                             Intent intent = new Intent(Profile.this, MainScreen.class);
                             intent.putExtra("ImageUri", imageUri.toString());
                         }else{
-                            Toast.makeText(Profile.this,"No image selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Profile.this,getString(R.string.no_pic), Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -198,7 +198,7 @@ public class Profile extends AppCompatActivity {
                             intent.putExtra("ImageUri", photoURI.toString());
                             //startActivity(intent);
                         } else {
-                            Toast.makeText(Profile.this, "No photo taken", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Profile.this, getString(R.string.no_photo), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -225,7 +225,7 @@ public class Profile extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera();
             } else {
-                Toast.makeText(this, "Camera permission is required to use camera", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.camerea_perm), Toast.LENGTH_SHORT).show();
             }
         }
     }

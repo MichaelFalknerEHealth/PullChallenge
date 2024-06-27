@@ -9,12 +9,12 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:text="Welcome,"
+        android:text="@string/welcome"
         android:textStyle="bold"
         android:textSize="35sp"
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
         android:gravity="center"
         android:id="@+id/TVwelcome"
         android:layout_height="wrap_content"/>
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/TVwelcome"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="name"
         android:textColor="@color/black"
@@ -35,7 +35,7 @@
         android:id="@+id/IVPic"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_below="@id/TVname"
         android:src="@drawable/person"
         android:layout_centerHorizontal="true"/>
@@ -44,36 +44,36 @@
         android:id="@+id/pull_up"
         android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:backgroundTint="#00BCD4"
-        android:layout_width="177dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/IVPic"
-        android:text="Get Started!"
-        android:textSize="18sp"
+        android:text="@string/new_match"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
+        android:layout_height="70dp"
+        android:layout_margin="60dp"
         android:layout_alignParentBottom="true">
 
         <ImageView
             android:id="@+id/IVProfile"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="50dp"
+            android:layout_marginRight="5dp"
             android:layout_gravity="end"
             android:src="@drawable/person" />
 
         <ImageView
             android:id="@+id/IVHistory"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="end"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/baseline_backup_24" />
 
     </RelativeLayout>
