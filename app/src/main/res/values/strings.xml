@@ -39,5 +39,6 @@
     <string name="create_room">Raum erstellen</string>
     <string name="join_room">Raum beitreten</string>
     <string name="room_code">Raum Code eingeben zum beitreten</string>
+    <string name="welcome">Wilkommen</string>
 
 </resources>
