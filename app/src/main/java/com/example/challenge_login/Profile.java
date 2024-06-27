@@ -3,9 +3,14 @@ package com.example.challenge_login;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +23,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -31,6 +37,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Profile extends AppCompatActivity {
+    private static final String TAG = "Profile";
+
     UserDatabase userDB;
     private static final int CAMERA_PERMISSION_CODE = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -59,7 +67,11 @@ public class Profile extends AppCompatActivity {
         userDB = UserDatabase.getUserDatabase(getApplicationContext());
         registerResult();
         registerTakePictureResult();
-
+        if (photoURI!=null) {
+            IVPic.setImageURI(photoURI);
+        }else{
+            Toast.makeText(Profile.this,getString(R.string.profile_pic), Toast.LENGTH_SHORT);
+        }
 
 
 
@@ -139,8 +151,12 @@ public class Profile extends AppCompatActivity {
         decisionDialBuilder.setPositiveButton(getString(R.string.recording), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (ActivityCompat.checkSelfPermission(Profile.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(Profile.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                if (ActivityCompat.checkSelfPermission(Profile.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || !Environment.isExternalStorageManager()) {
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.R) {
+                        ActivityCompat.requestPermissions(Profile.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                        Intent intent = new Intent ();
+                        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    }
                 } else {
                     openCamera();
                 }
@@ -166,7 +182,17 @@ public class Profile extends AppCompatActivity {
     private void pickImage(){
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         resultLauncher.launch(intent);
-        //test
+    }
+    private void openCamera() {
+        Intent open_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        resultLauncher.launch(open_camera);
+        //startActivity(open_camera);
+        photoURI = createUri();
+        if (photoURI!=null){
+            takePictureLauncher.launch(photoURI);
+        }else {
+            Toast.makeText(this, "error creating URI", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void registerResult(){
@@ -177,8 +203,11 @@ public class Profile extends AppCompatActivity {
                         if(result.getResultCode()==RESULT_OK && result.getData()!=null){
                             Uri imageUri = result.getData().getData();
                             IVPic.setImageURI(imageUri);
-                            Intent intent = new Intent(Profile.this, MainScreen.class);
+                            Intent intent = new Intent(getApplicationContext(), MainScreen.class);
                             intent.putExtra("ImageUri", imageUri.toString());
+                            String username = getIntent().getStringExtra("name");
+                            intent.putExtra("name",username);
+                            startActivity(intent);
                         }else{
                             Toast.makeText(Profile.this,getString(R.string.no_pic), Toast.LENGTH_SHORT).show();
 
@@ -196,7 +225,9 @@ public class Profile extends AppCompatActivity {
                             IVPic.setImageURI(photoURI);
                             Intent intent = new Intent(Profile.this, MainScreen.class);
                             intent.putExtra("ImageUri", photoURI.toString());
-                            //startActivity(intent);
+                            String username = getIntent().getStringExtra("name");
+                            intent.putExtra("name", username);
+                            startActivity(intent);
                         } else {
                             Toast.makeText(Profile.this, getString(R.string.no_photo), Toast.LENGTH_SHORT).show();
                         }
@@ -205,19 +236,24 @@ public class Profile extends AppCompatActivity {
     }
 
     private Uri createUri(){
-        File imageFile = new File(getApplicationContext().getExternalFilesDir(null),"camrea_photo.jpg");
-        return FileProvider.getUriForFile(
-                getApplicationContext(),
-                "com.example.camerapermission.fileProvider",
-                imageFile
-        );
+        try {
+            File imageFile = new File(getApplicationContext().getExternalFilesDir(null), "external_files.jpg");
+            if (!imageFile.exists()) {
+                imageFile.createNewFile();
+            }
+            return FileProvider.getUriForFile(
+                    getApplicationContext(),
+                    "com.example.challenge_login.fileProvider",
+                    imageFile
+            );
+        }catch (Exception e){
+            Log.e(TAG, "Error creating file URI", e);
+            return null;
+        }
 
     }
 
-    private void openCamera() {
-        photoURI = createUri();
-        takePictureLauncher.launch(photoURI);
-    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -230,8 +266,7 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-
-    }
+}
 
 
 
