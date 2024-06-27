@@ -134,7 +134,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
                     @Override
                     public void onFinish() {
-                        TVCountdown.setText("START!"); // Countdown abgeschlossen, zeige "GO!"
+                        // Countdown abgeschlossen, zeige "START!"
+                        TVCountdown.setText(getString(R.string.start));
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.start);
                         mediaPlayer.start();
                         // Hier die Methode aufrufen, um den Counter zu starten
@@ -198,8 +199,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private void createRoom(String roomCode) {
         String userId = user;
         DatabaseReference roomRef = roomsRef.child(roomCode);
+        //Normal
+        //roomRef.child("Player 1").child(userId).child("player1_score").setValue(0);
+        //Für Testzwecke ohne Android Handy
         roomRef.child("Player 1").child(userId).child("player1_score").setValue(6);
-        TVPlayerlist.setText("Player 1: " + userId);
+        TVPlayerlist.setText(getString(R.string.Player1) +": "+ userId);
         isPlayer1 = true;
         monitorScores(roomCode);
     }
@@ -207,7 +211,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private void joinRoom(String roomCode) {
         String userId = user;
 
-        TVPlayerlist2.setText("Player 2: " + userId);
+        TVPlayerlist2.setText(getString(R.string.Player2) +": "+ userId);
 
         DatabaseReference roomRef = roomsRef.child(roomCode);
 
@@ -225,7 +229,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     monitorScores(roomCode);
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Room does not exist or already has two players", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_room), Toast.LENGTH_SHORT).show();
                     // Handle errors, like room does not exist or already has two players
                 }
             }
@@ -245,7 +249,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 if (snapshot.exists() && snapshot.hasChild("Player 1") && snapshot.hasChild("Player 2")) {
                     startCounting();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Die Runde wird nicht gestartet, da nur ein Spieler beigetreten ist.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_room_one_player), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -287,7 +291,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                             if (childSnapshot.hasChild("player1_score")) {
                                 player1Score = childSnapshot.child("player1_score").getValue(Integer.class);
                                 player1ScoreValue = player1Score != null ? player1Score : 0;
-                                scoreView.setText("Player 1 (" + playerName + "): " + player1ScoreValue);
+                                scoreView.setText(getString(R.string.Player1) +  " (" + playerName + "): " + player1ScoreValue);
                             }
                         }
 
@@ -299,7 +303,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                             if (childSnapshot.hasChild("player2_score")) {
                                 player2Score = childSnapshot.child("player2_score").getValue(Integer.class);
                                 player2ScoreValue = player2Score != null ? player2Score : 0;
-                                scoreViewPlayer2.setText("Player 2 (" + playerName + "): " + player2ScoreValue);
+                                scoreViewPlayer2.setText(getString(R.string.Player2) +  " (" + playerName + "): " + player2ScoreValue);
                             }
                         }
                     }
@@ -307,20 +311,20 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     if (player1Score != null && player1Score != 0 && player2Score != null && player2Score != 0) {
                         if (isPlayer1){
                             if (player1Score>player2Score){
-                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n Gewonnen!");
+                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n" + getString(R.string.gewonnen) + " !");
                             }else if(player2Score>player1Score){
-                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n Verloren!");
+                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n" + getString(R.string.verloren) + " !");
                             }else{
-                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n Unentschieden!");
+                                TVCountdown.setText(player1Score + "  -  " + player2Score + "\n" + getString(R.string.unentschieden) + " !");
                             }
 
                         }else{
                             if (player1Score<player2Score){
-                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n Gewonnen!");
+                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n" + getString(R.string.gewonnen) + " !");
                             }else if(player2Score<player1Score){
-                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n Verloren!");
+                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n" + getString(R.string.verloren) + " !");
                             }else{
-                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n Unentschieden!");
+                                TVCountdown.setText(player2Score + "  -  " + player1Score + "\n" + getString(R.string.unentschieden) + " !");
                             }
 
                         }

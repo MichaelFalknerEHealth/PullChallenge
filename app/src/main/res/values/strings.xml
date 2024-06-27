@@ -17,4 +17,12 @@
     <string name="BTdatabase">Database</string>
     <string name="TVRegister">Register</string>
     <string name="BTRegister">Register</string>
+    <string name="Player1">Spieler 1</string>
+    <string name="Player2">Spieler 2</string>
+    <string name="error_room">Raum existiert bereits oder hat schon zwei Spieler</string>
+    <string name="error_room_one_player">Die Runde wird nicht gestartet, da nur ein Spieler beigetreten ist.</string>
+    <string name="gewonnen">Gewonnen</string>
+    <string name="verloren">Verloren</string>
+    <string name="unentschieden">Unentschieden</string>
+
 </resources>
