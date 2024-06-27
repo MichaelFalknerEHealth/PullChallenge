@@ -229,14 +229,15 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     monitorScores(roomCode);
 
                 } else {
+                    // Error Handling, wenn der Raum nicht existiert oder schon zwei Spieler gejoint sind
                     Toast.makeText(getApplicationContext(), getString(R.string.error_room), Toast.LENGTH_SHORT).show();
-                    // Handle errors, like room does not exist or already has two players
+
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Handle possible errors
+                // FehlerHandling (wird nicht gebraucht)
             }
         });
     }
@@ -249,6 +250,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 if (snapshot.exists() && snapshot.hasChild("Player 1") && snapshot.hasChild("Player 2")) {
                     startCounting();
                 } else {
+                    //Fehlermeldung wenn nur ein Spieler im Raum ist und gestartet werden soll
                     Toast.makeText(getApplicationContext(), getString(R.string.error_room_one_player), Toast.LENGTH_LONG).show();
                 }
             }

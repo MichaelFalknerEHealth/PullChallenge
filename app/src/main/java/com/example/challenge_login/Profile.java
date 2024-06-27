@@ -75,7 +75,7 @@ public class Profile extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(Profile.this, "Password updated",
+                                    Toast.makeText(Profile.this, getString(R.string.update),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -84,7 +84,7 @@ public class Profile extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(Profile.this, "old password is incorrect",
+                                    Toast.makeText(Profile.this, getString(R.string.wrong_old),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -93,12 +93,12 @@ public class Profile extends AppCompatActivity {
                     }).start();
                 }else{
                     if(!validatePassword(PWnew)){
-                        Toast.makeText(Profile.this, "password has to contain at least 8 figures, upper and lower case, numbers and special characters",
+                        Toast.makeText(Profile.this, getString(R.string.req_pass),
                                 Toast.LENGTH_LONG).show();
                     }
 
                     if(PWold.equals(PWnew)){
-                        Toast.makeText(Profile.this, "new password must not match with the old one",
+                        Toast.makeText(Profile.this, getString(R.string.req_same),
                                 Toast.LENGTH_LONG).show();
                     }
                 }

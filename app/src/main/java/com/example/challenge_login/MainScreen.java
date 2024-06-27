@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainScreen extends AppCompatActivity {
-    //push test
 
     TextView TVname;
     Button pull_up;

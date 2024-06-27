@@ -9,13 +9,13 @@
         android:id="@+id/roomCodeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter a Room Code to join" />
+        android:hint="@string/room_code" />
 
     <Button
         android:id="@+id/createRoomButton"
         android:layout_width="match_parent"
         android:backgroundTint="#00BCD4"
-        android:text="Create Room"
+        android:text="@string/create_room"
         android:layout_height="60dp"
         android:textSize="30sp"
         />
@@ -24,7 +24,7 @@
         android:id="@+id/joinRoomButton"
         android:backgroundTint="#00BCD4"
         android:layout_width="match_parent"
-        android:text="Join Room"
+        android:text="@string/join_room"
         android:layout_height="60dp"
         android:textSize="30sp"
         />
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="127dp"
         android:textSize="38sp"
-        android:text="Create a Room"
+        android:text="@string/create_room"
         android:gravity="center"
         android:layout_gravity="center" />
 
@@ -94,14 +94,14 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Player 1:"
+        android:text="@string/Player1"
         android:textSize="38sp" />
     <TextView
         android:id="@+id/TVPlayerlist2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="Player 2:"
+        android:text="@string/Player2"
         android:textSize="38sp" />
 
     <TextView
@@ -109,14 +109,14 @@
         android:layout_width="match_parent"
         android:layout_height="146dp"
         android:gravity="center"
-        android:text="Countdown"
+        android:text="@string/countdown"
         android:textSize="40dp" />
 
     <Button
         android:id="@+id/BTBack"
         android:layout_width="175dp"
         android:backgroundTint="#00BCD4"
-        android:text="Back"
+        android:text="@string/back"
         android:layout_height="60dp"
         android:textSize="30sp"
         />

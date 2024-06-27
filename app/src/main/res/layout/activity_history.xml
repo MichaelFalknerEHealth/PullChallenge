@@ -18,7 +18,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="30dp"
-        android:text="Your History" />
+        android:text="@string/history" />
 
 
 <ScrollView
@@ -47,7 +47,7 @@
         android:backgroundTint="#00BCD4"
         android:layout_height="60dp"
         android:textSize="30sp"
-        android:text="Back" />
+        android:text="@string/back" />
 
 
 </RelativeLayout>
