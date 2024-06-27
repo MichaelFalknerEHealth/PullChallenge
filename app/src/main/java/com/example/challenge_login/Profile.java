@@ -36,8 +36,6 @@ public class Profile extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     ActivityResultLauncher<Uri> takePictureLauncher;
 
-
-
     ActivityResultLauncher<Intent> resultLauncher;
     ImageView IVPic;
     Uri photoURI;
@@ -168,6 +166,7 @@ public class Profile extends AppCompatActivity {
     private void pickImage(){
         Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         resultLauncher.launch(intent);
+        //test
     }
 
     private void registerResult(){

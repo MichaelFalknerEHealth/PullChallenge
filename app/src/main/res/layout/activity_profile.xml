@@ -16,6 +16,16 @@
         android:gravity="center"
         android:layout_marginTop="5dp"
         android:text="filler"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/IVPic"
+        android:layout_below="@id/BTChangePW"
+        android:layout_toRightOf="@id/BTPicture"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/person"/>
+
     <TextView
         android:id="@+id/TVHello"
         android:layout_width="match_parent"
@@ -48,6 +58,7 @@
         android:layout_height="wrap_content"
         android:textSize="18dp"
         android:text="Change Password" />
+
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/ETPWold"
@@ -58,6 +69,7 @@
         android:layout_marginTop="250dp"
         android:background="@color/white"
         android:layout_height="wrap_content"/>
+
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/ETPWnew"
@@ -68,6 +80,7 @@
         android:background="@color/white"
         android:inputType="textPassword"
         android:layout_height="wrap_content"/>
+
     <Button
         android:id="@+id/BTPicture"
         android:layout_width="wrap_content"
