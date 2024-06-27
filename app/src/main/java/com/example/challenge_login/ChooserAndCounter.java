@@ -223,7 +223,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     //roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
 
                     //Test mit der Variable 7
-                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(7);
+                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(6);
                     isPlayer1 = false;
                     displayCode.setText(roomCode);
                     monitorScores(roomCode);
@@ -268,7 +268,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             public void run() {
                 if (accelerometer != null) {
                     sensorManager.registerListener(ChooserAndCounter.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
+                    okButton.setEnabled(false);
+                    joinRoomButton.setEnabled(false);
+                    createRoomButton.setEnabled(false);
                 }
             }
         }, 0);// 0 seconds delay
@@ -334,8 +336,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
                         // Ergebnisse in Firebase speichern, wenn beide Scores vorhanden sind
                         saveResultsToHistory();
+
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.game_over);
                         mediaPlayer.start();
+                        okButton.setEnabled(true);
+                        joinRoomButton.setEnabled(true);
+                        createRoomButton.setEnabled(true);
                     }
                 }
             }
