@@ -31,6 +31,15 @@
         android:textSize="35sp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/IVPic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/TVname"
+        android:src="@drawable/person"
+        android:layout_centerHorizontal="true"/>
+
     <Button
         android:id="@+id/pull_up"
         android:gravity="center"
@@ -39,7 +48,7 @@
         android:backgroundTint="#00BCD4"
         android:layout_width="177dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/TVname"
+        android:layout_below="@id/IVPic"
         android:text="Get Started!"
         android:textSize="18sp"
         android:textStyle="bold" />

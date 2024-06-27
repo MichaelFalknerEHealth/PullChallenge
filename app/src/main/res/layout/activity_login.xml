@@ -113,22 +113,4 @@
         android:textSize="18dp"
         android:textStyle="normal" />
 
-    <com.google.android.material.button.MaterialButton
-     android:layout_width="wrap_content"
-     android:layout_below="@id/TVregister"
-     android:layout_margin="5dp"
-     android:backgroundTint="#00BCD4"
-     android:text="@string/BTdatabase"
-     android:textStyle="bold"
-     android:id="@+id/adminBtn"
-     android:textSize="18dp"
-     android:layout_height="wrap_content"
-     android:layout_centerHorizontal="true"
-     android:gravity="center"/>
-
-
-        
-
-
-
 </RelativeLayout>

@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         EditText ETPass = findViewById(R.id.etPass);
         Button loginBtn = findViewById(R.id.loginBtn);
         TextView registerBtn = findViewById(R.id.TVregister1);
-        Button adminBtn = findViewById(R.id.adminBtn);
         ImageButton IBvisibility = findViewById(R.id.IVvisible);
         Intent intent1 = new Intent(getApplicationContext(),RegisterClass.class);
         Intent intent2 = new Intent(getApplicationContext(),Admin.class);
@@ -107,14 +106,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(intent1);
-            }
-        });
-
-        //shows data in database, will be deleted in final outcome
-        adminBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(intent2);
             }
         });
 

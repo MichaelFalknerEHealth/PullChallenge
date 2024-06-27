@@ -23,7 +23,7 @@
         android:textSize="30dp"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="@string/tuen"/>
+        android:text="What can we do for you,"/>
 
     <Button
         android:id="@+id/BTBack"
@@ -34,7 +34,7 @@
         android:backgroundTint="#00BCD4"
         android:layout_height="60dp"
         android:textSize="30sp"
-        android:text="@string/back" />
+        android:text="Back" />
 
     <Button
         android:id="@+id/BTChangePW"
@@ -47,11 +47,11 @@
         android:backgroundTint="#00BCD4"
         android:layout_height="wrap_content"
         android:textSize="18dp"
-        android:text="@string/pasword_change" />
+        android:text="Change Password" />
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/ETPWold"
-        android:hint="@string/old_enter"
+        android:hint="enter old Password"
         android:inputType="textPassword"
         android:textColorHint="@color/black"
         android:padding="20dp"
@@ -61,7 +61,7 @@
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/ETPWnew"
-        android:hint="@string/new_enter"
+        android:hint="enter new Password"
         android:textColorHint="@color/black"
         android:padding="20dp"
         android:layout_below="@id/ETPWold"
@@ -76,7 +76,7 @@
         android:backgroundTint="#00BCD4"
         android:layout_height="wrap_content"
         android:textSize="18dp"
-        android:text="@string/avatar_choose" />
+        android:text="Choose Avatar" />
 
 
 </RelativeLayout>

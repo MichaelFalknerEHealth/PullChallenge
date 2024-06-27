@@ -1,11 +1,13 @@
 package com.example.challenge_login;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +19,7 @@ public class MainScreen extends AppCompatActivity {
 
     TextView TVname;
     Button pull_up;
-    ImageView IVHistory, IVProfile;
+    ImageView IVHistory, IVProfile, IVPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +29,16 @@ public class MainScreen extends AppCompatActivity {
 
         IVHistory = findViewById(R.id.IVHistory);
         IVProfile = findViewById(R.id.IVProfile);
+        IVPic = findViewById(R.id.IVPic);
         TVname = findViewById(R.id.TVname);
         String name = getIntent().getStringExtra("name");
+        String ImageUriString = getIntent().getStringExtra("ImageUri");
+        if (ImageUriString!=null) {
+            Uri ImageUri = Uri.parse(ImageUriString);
+            IVPic.setImageURI(ImageUri);
+        }else{
+            Toast.makeText(MainScreen.this,"No profile picture found", Toast.LENGTH_SHORT);
+        }
         TVname.setText(name+ "!");
 
 
@@ -37,8 +47,6 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChooserAndCounter.class);
-                //intent.putExtra("name",  name);
-               //startActivity(intent);
                 startActivity(intent.putExtra("name",name));
             }
         });
