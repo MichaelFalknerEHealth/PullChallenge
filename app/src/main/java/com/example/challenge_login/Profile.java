@@ -32,12 +32,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Profile extends AppCompatActivity {
     private static final String TAG = "Profile";
+    private DatabaseReference roomsRef;
+
 
     UserDatabase userDB;
     private static final int CAMERA_PERMISSION_CODE = 1;
@@ -65,6 +70,7 @@ public class Profile extends AppCompatActivity {
         EditText ETPWnew = findViewById(R.id.ETPWnew);
         IVPic = findViewById(R.id.IVPic);
         userDB = UserDatabase.getUserDatabase(getApplicationContext());
+
         registerResult();
         registerTakePictureResult();
         if (photoURI!=null) {

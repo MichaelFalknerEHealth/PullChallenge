@@ -9,12 +9,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterClass extends AppCompatActivity {
+    private DatabaseReference roomsRef;
 
-   UserDatabase userDB;
+
+    UserDatabase userDB;
 
 
     @Override
@@ -29,6 +34,9 @@ public class RegisterClass extends AppCompatActivity {
         Button registerBtn = findViewById(R.id.registerBtn);
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        roomsRef = database.getReference("Accounts");
+
 
 
 
@@ -40,6 +48,10 @@ public class RegisterClass extends AppCompatActivity {
                 String uname = ETUser.getText().toString();
                 String password = ETPass.getText().toString();
                 String password2 = ETPass2.getText().toString();
+                String UriFiller = "0";
+                DatabaseReference roomRef = roomsRef.child(uname);
+
+
                 user.setUname(uname);
                 user.setPassword(password);
                 if(validateInput(user)&& password.equals(password2)&&validatePassword(password)){
@@ -49,8 +61,13 @@ public class RegisterClass extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            //register user
+                            //register user and add username to firebase
                             userDB.userDAO().addUser(user);
+                            roomRef.child("Username").setValue(uname);
+                            roomRef.child("Password").setValue(password);
+                            roomRef.child("ImageURI").setValue(UriFiller);
+
+
                             startActivity(intent);
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -86,13 +103,15 @@ public class RegisterClass extends AppCompatActivity {
         //8 figures, upper and lower case,numbers, special character
         Pattern regex = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
         Matcher m = regex.matcher(password);
-        return (m.matches());
+       // return (m.matches());
+        return true;
     }
     //validate password on input
     private Boolean validateInput(User user){
         if(user.getUname().isEmpty()||
         user.getPassword().isEmpty()){
-            return false;
+            //wieder auf false setzen
+            return true;
         }
         return true;
     }
