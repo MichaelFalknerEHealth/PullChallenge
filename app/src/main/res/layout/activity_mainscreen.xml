@@ -32,7 +32,7 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/IVPic"
+        android:id="@+id/IVImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
@@ -48,7 +48,7 @@
         android:backgroundTint="#00BCD4"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/IVPic"
+        android:layout_below="@id/IVImage"
         android:text="@string/new_match"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -60,7 +60,7 @@
         android:layout_alignParentBottom="true">
 
         <ImageView
-            android:id="@+id/IVProfile"
+            android:id="@+id/IVBTProfile"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_alignParentRight="true"

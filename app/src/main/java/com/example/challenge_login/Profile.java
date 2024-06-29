@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,9 +38,7 @@ public class Profile extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1;
     ActivityResultLauncher<Uri> takePictureLauncher;
     Uri ImageUri;
-    DatabaseReference roomsRef;
     DatabaseReference roomsRef1;
-    DatabaseReference roomsRef2;
     private UserDatabase userDB;
     private ImageView IVImage;
     String username;
@@ -55,14 +58,37 @@ public class Profile extends AppCompatActivity {
         Button BTPicture = findViewById(R.id.BTPicture);
         EditText ETPWold = findViewById(R.id.ETPWold);
         EditText ETPWnew = findViewById(R.id.ETPWnew);
-        IVImage = findViewById(R.id.IVPic);
+        IVImage = findViewById(R.id.IVImage);
         userDB = UserDatabase.getUserDatabase(getApplicationContext());
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        roomsRef1 = FirebaseDatabase.getInstance().getReference();
 
+
+
+        registerPictureLauncher();
 
         ImageUri = createUri();
-        registerPictureLauncher();
-        IVImage.setImageURI(ImageUri);
+        DatabaseReference ImageUriRef = roomsRef1.child("Accounts").child(username).child("ImageUri");
+        ImageUriRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String ImageUriString = snapshot.getValue(String.class);
+                    if (ImageUriString != null && !ImageUriString.isEmpty()) {
+                        Log.d("MainScreen", "Image URI: " + ImageUriString);
+                        // Verwenden Sie eine Bibliothek wie Picasso oder Glide zum Laden des Bildes
+                        Uri ImageUri = Uri.parse(ImageUriString);
+                        IVImage.setImageURI(ImageUri);
+                    } else {
+                        Log.d("MainScreen", "Image URI is null or empty");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         BTBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,21 +155,14 @@ public class Profile extends AppCompatActivity {
     public void showDecisionDialog() {
         AlertDialog.Builder decisionDialBuilder = new AlertDialog.Builder(this);
         decisionDialBuilder.setTitle(getString(R.string.picture_choose));
-        decisionDialBuilder.setMessage(getString(R.string.picture_rec));
-        decisionDialBuilder.setPositiveButton(getString(R.string.recording), new DialogInterface.OnClickListener() {
+        decisionDialBuilder.setPositiveButton(getString(R.string.open_cam), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 checkCameraPermissionAndOpenCamera();
 
             }
         });
-        decisionDialBuilder.setNegativeButton(getString(R.string.gallery), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO: Implement gallery selection
-            }
-        });
-        decisionDialBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        decisionDialBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -167,11 +186,8 @@ public class Profile extends AppCompatActivity {
                             if(o){
                                 IVImage.setImageURI(null);
                                 IVImage.setImageURI(ImageUri);
-                                //Intent intent = new Intent(Profile.this,MainScreen.class);
-                                //intent.putExtra("image_uri",ImageUri.toString());
-                                //intent.putExtra("name", username);
-                                //startActivity(intent);
-                                roomsRef1.child("ImageUri").setValue(ImageUri.toString());
+                                roomsRef1.child("Accounts").child(username).child("ImageUri").setValue(ImageUri.toString());
+
                             }
                         }catch (Exception exception){
                             exception.getStackTrace();

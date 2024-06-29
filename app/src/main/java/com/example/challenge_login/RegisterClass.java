@@ -20,6 +20,7 @@ public class RegisterClass extends AppCompatActivity {
 
 
     UserDatabase userDB;
+    String UriFiller;
 
 
     @Override
@@ -48,7 +49,7 @@ public class RegisterClass extends AppCompatActivity {
                 String uname = ETUser.getText().toString();
                 String password = ETPass.getText().toString();
                 String password2 = ETPass2.getText().toString();
-                String UriFiller = null;
+                UriFiller = "";
                 DatabaseReference roomRef = roomsRef.child(uname);
 
 
@@ -103,7 +104,8 @@ public class RegisterClass extends AppCompatActivity {
         //8 figures, upper and lower case,numbers, special character
         Pattern regex = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
         Matcher m = regex.matcher(password);
-       return (m.matches());
+      return (m.matches());
+        //return true;
     }
     //validate password on input
     private Boolean validateInput(User user){

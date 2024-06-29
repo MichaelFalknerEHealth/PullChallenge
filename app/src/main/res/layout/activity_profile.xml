@@ -20,7 +20,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/IVPic"
+        android:id="@+id/IVImage"
         android:layout_below="@id/BTChangePW"
         android:layout_toRightOf="@id/BTPicture"
         android:layout_marginLeft="20dp"

@@ -42,8 +42,8 @@
     <string name="room_code">Raum Code eingeben zum beitreten</string>
     <string name="welcome">Wilkommen,</string>
     <string name="picture_choose">Bild auswählen</string>
-    <string name="picture_rec">Bild aufnehmen oder von Galerie auswählen</string>
-    <string name="recording">Bild aufnehmen</string>
+    <string name="picture_rec">Bild aufnehmen</string>
+    <string name="open_cam">Kamera öffnen</string>
     <string name="gallery">Von Gallerie auswählen</string>
     <string name="cancel">Abbrechen</string>
     <string name="no_pic">Kein Bild ausgewählt</string>
