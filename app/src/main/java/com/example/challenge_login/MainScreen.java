@@ -10,16 +10,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainScreen extends AppCompatActivity {
 
     TextView TVname;
     Button pull_up;
     ImageView IVHistory, IVProfile, IVPic;
+    DatabaseReference roomsRef;
+    DatabaseReference roomsRef1;
+    DatabaseReference roomsRef2;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +45,12 @@ public class MainScreen extends AppCompatActivity {
         IVPic = findViewById(R.id.IVPic);
         TVname = findViewById(R.id.TVname);
         String name = getIntent().getStringExtra("name");
-        String ImageUriString = getIntent().getStringExtra("image_uri");
-        if (ImageUriString!=null) {
-            Uri ImageUri = Uri.parse(ImageUriString);
-            IVPic.setImageURI(ImageUri);
-        }else{
-            Toast.makeText(MainScreen.this,getString(R.string.profile_pic), Toast.LENGTH_SHORT);
-        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        roomsRef = database.getReference("Accounts");
+        roomsRef1 = roomsRef.child(name).child("ImageUri");
+        roomsRef2 = roomsRef1.child("ImageUri");
+        roomsRef2.getKey().toString();
         TVname.setText(name+ "!");
 
 
@@ -68,5 +80,23 @@ public class MainScreen extends AppCompatActivity {
 
 
 
+        }
+
+        private void getUri(){
+        roomsRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String ImageUriString = snapshot.toString();
+                    Uri ImageUri = Uri.parse(ImageUriString);
+                    IVPic.setImageURI(ImageUri);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         }
     }

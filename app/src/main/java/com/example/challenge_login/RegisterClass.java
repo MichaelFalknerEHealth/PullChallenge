@@ -48,7 +48,7 @@ public class RegisterClass extends AppCompatActivity {
                 String uname = ETUser.getText().toString();
                 String password = ETPass.getText().toString();
                 String password2 = ETPass2.getText().toString();
-                String UriFiller = "0";
+                String UriFiller = null;
                 DatabaseReference roomRef = roomsRef.child(uname);
 
 
@@ -65,7 +65,7 @@ public class RegisterClass extends AppCompatActivity {
                             userDB.userDAO().addUser(user);
                             roomRef.child("Username").setValue(uname);
                             roomRef.child("Password").setValue(password);
-                            roomRef.child("ImageURI").setValue(UriFiller);
+                            roomRef.child("ImageUri").setValue(UriFiller);
 
 
                             startActivity(intent);
@@ -103,15 +103,14 @@ public class RegisterClass extends AppCompatActivity {
         //8 figures, upper and lower case,numbers, special character
         Pattern regex = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
         Matcher m = regex.matcher(password);
-       // return (m.matches());
-        return true;
+       return (m.matches());
     }
     //validate password on input
     private Boolean validateInput(User user){
         if(user.getUname().isEmpty()||
         user.getPassword().isEmpty()){
             //wieder auf false setzen
-            return true;
+            return false;
         }
         return true;
     }
