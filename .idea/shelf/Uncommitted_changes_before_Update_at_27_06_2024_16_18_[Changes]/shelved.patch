@@ -1,0 +1,113 @@
+Index: app/src/main/java/com/example/challenge_login/Profile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.challenge_login;\r\n\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.content.pm.PackageManager;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.activity.result.ActivityResult;\r\nimport androidx.activity.result.ActivityResultCallback;\r\nimport androidx.activity.result.ActivityResultLauncher;\r\nimport androidx.activity.result.contract.ActivityResultContracts;\r\nimport androidx.appcompat.app.AlertDialog;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.app.ActivityCompat;\r\nimport androidx.core.content.FileProvider;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport java.io.File;\r\nimport java.util.regex.Matcher;\r\nimport java.util.regex.Pattern;\r\n\r\npublic class Profile extends AppCompatActivity {\r\n    UserDatabase userDB;\r\n    private static final int CAMERA_PERMISSION_CODE = 1;\r\n    private static final int REQUEST_IMAGE_CAPTURE = 1;\r\n    ActivityResultLauncher<Uri> takePictureLauncher;\r\n\r\n    ActivityResultLauncher<Intent> resultLauncher;\r\n    ImageView IVPic;\r\n    Uri photoURI;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_profile);\r\n        TextView TVName = findViewById(R.id.TVName);\r\n        String username = getIntent().getStringExtra(\"name\");\r\n        TVName.setText(username + \"?\");\r\n\r\n        Button BTBack = findViewById(R.id.BTBack);\r\n        Button BTChangePW = findViewById(R.id.BTChangePW);\r\n        Button BTPicture = findViewById(R.id.BTPicture);\r\n        EditText ETPWold = findViewById(R.id.ETPWold);\r\n        EditText ETPWnew = findViewById(R.id.ETPWnew);\r\n        IVPic = findViewById(R.id.IVPic);\r\n        userDB = UserDatabase.getUserDatabase(getApplicationContext());\r\n        registerResult();\r\n        registerTakePictureResult();\r\n\r\n\r\n\r\n\r\n        BTBack.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n\r\n            }\r\n        });\r\n\r\n        BTPicture.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                showDecisionDialog();\r\n            }\r\n        });\r\n        BTChangePW.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String PWold = ETPWold.getText().toString();\r\n                String PWnew = ETPWnew.getText().toString();\r\n                if(validatePassword(PWnew)) {\r\n\r\n                    new Thread(new Runnable() {\r\n                        @Override\r\n                        public void run() {\r\n                            User user = userDB.userDAO().getUserByUsername(username);\r\n                            if(user.getPassword().equals(PWold)){\r\n                            user.setPassword(PWnew);\r\n                            userDB.userDAO().updateUser(user);\r\n                            runOnUiThread(new Runnable() {\r\n                                @Override\r\n                                public void run() {\r\n                                    Toast.makeText(Profile.this, getString(R.string.update),\r\n                                            Toast.LENGTH_SHORT).show();\r\n                                }\r\n                            });\r\n\r\n                        }else {\r\n                            runOnUiThread(new Runnable() {\r\n                                @Override\r\n                                public void run() {\r\n                                    Toast.makeText(Profile.this, getString(R.string.wrong_old),\r\n                                            Toast.LENGTH_SHORT).show();\r\n                                }\r\n                            });\r\n                            }\r\n                        }\r\n                    }).start();\r\n                }else{\r\n                    if(!validatePassword(PWnew)){\r\n                        Toast.makeText(Profile.this, getString(R.string.req_pass),\r\n                                Toast.LENGTH_LONG).show();\r\n                    }\r\n\r\n                    if(PWold.equals(PWnew)){\r\n                        Toast.makeText(Profile.this, getString(R.string.req_same),\r\n                                Toast.LENGTH_LONG).show();\r\n                    }\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    private Boolean validatePassword(String password){\r\n        //8 figures, upper and lower case,numbers, special character\r\n        Pattern regex = Pattern.compile(\"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=!])(?=\\\\S+$).{8,}$\");\r\n        Matcher m = regex.matcher(password);\r\n        return (m.matches());\r\n    }\r\n\r\n    public void showDecisionDialog(){\r\n        AlertDialog.Builder decisionDialBuilder = new AlertDialog.Builder(this);\r\n        decisionDialBuilder.setTitle(\"Choose Picture\");\r\n        decisionDialBuilder.setMessage(\"Take a picture or choose from gallery\");\r\n        decisionDialBuilder.setPositiveButton(\"take a picture\", new DialogInterface.OnClickListener() {\r\n            @Override\r\n            public void onClick(DialogInterface dialog, int which) {\r\n                if (ActivityCompat.checkSelfPermission(Profile.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {\r\n                    ActivityCompat.requestPermissions(Profile.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);\r\n                } else {\r\n                    openCamera();\r\n                }\r\n\r\n            }\r\n        });\r\n        decisionDialBuilder.setNegativeButton(\"choose from gallery\", new DialogInterface.OnClickListener() {\r\n            @Override\r\n            public void onClick(DialogInterface dialog, int which) {\r\n                pickImage();\r\n            }\r\n        });\r\n        decisionDialBuilder.setNeutralButton(\"cancel\", new DialogInterface.OnClickListener() {\r\n            @Override\r\n            public void onClick(DialogInterface dialog, int which) {\r\n                dialog.dismiss();\r\n\r\n            }\r\n        });\r\n        decisionDialBuilder.create().show();\r\n\r\n    }\r\n    private void pickImage(){\r\n        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);\r\n        resultLauncher.launch(intent);\r\n        //test\r\n    }\r\n\r\n    private void registerResult(){\r\n        resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),\r\n                new ActivityResultCallback<ActivityResult>() {\r\n                    @Override\r\n                    public void onActivityResult(ActivityResult result) {\r\n                        if(result.getResultCode()==RESULT_OK && result.getData()!=null){\r\n                            Uri imageUri = result.getData().getData();\r\n                            IVPic.setImageURI(imageUri);\r\n                            Intent intent = new Intent(Profile.this, MainScreen.class);\r\n                            intent.putExtra(\"ImageUri\", imageUri.toString());\r\n                        }else{\r\n                            Toast.makeText(Profile.this,\"No image selected\", Toast.LENGTH_SHORT).show();\r\n\r\n                        }\r\n                    }\r\n                });\r\n\r\n    }\r\n    private void registerTakePictureResult() {\r\n        takePictureLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),\r\n                new ActivityResultCallback<Boolean>() {\r\n                    @Override\r\n                    public void onActivityResult(Boolean result) {\r\n                        if (result) {\r\n                            IVPic.setImageURI(photoURI);\r\n                            Intent intent = new Intent(Profile.this, MainScreen.class);\r\n                            intent.putExtra(\"ImageUri\", photoURI.toString());\r\n                            //startActivity(intent);\r\n                        } else {\r\n                            Toast.makeText(Profile.this, \"No photo taken\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n\r\n    private Uri createUri(){\r\n        File imageFile = new File(getApplicationContext().getExternalFilesDir(null),\"camrea_photo.jpg\");\r\n        return FileProvider.getUriForFile(\r\n                getApplicationContext(),\r\n                \"com.example.camerapermission.fileProvider\",\r\n                imageFile\r\n        );\r\n\r\n    }\r\n\r\n    private void openCamera() {\r\n        photoURI = createUri();\r\n        takePictureLauncher.launch(photoURI);\r\n    }\r\n    @Override\r\n    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {\r\n        super.onRequestPermissionsResult(requestCode, permissions, grantResults);\r\n        if (requestCode == CAMERA_PERMISSION_CODE) {\r\n            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {\r\n                openCamera();\r\n            } else {\r\n                Toast.makeText(this, \"Camera permission is required to use camera\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/challenge_login/Profile.java b/app/src/main/java/com/example/challenge_login/Profile.java
+--- a/app/src/main/java/com/example/challenge_login/Profile.java	(revision fb8e19e266231b8de0037d16fd5c91f4a82572ab)
++++ b/app/src/main/java/com/example/challenge_login/Profile.java	(date 1719497744504)
+@@ -6,6 +6,7 @@
+ import android.net.Uri;
+ import android.os.Bundle;
+ import android.provider.MediaStore;
++import android.util.Log;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.EditText;
+@@ -31,6 +32,8 @@
+ import java.util.regex.Pattern;
+ 
+ public class Profile extends AppCompatActivity {
++    private static final String TAG = "Profile";
++
+     UserDatabase userDB;
+     private static final int CAMERA_PERMISSION_CODE = 1;
+     private static final int REQUEST_IMAGE_CAPTURE = 1;
+@@ -59,6 +62,7 @@
+         userDB = UserDatabase.getUserDatabase(getApplicationContext());
+         registerResult();
+         registerTakePictureResult();
++        IVPic.setImageURI(photoURI);
+ 
+ 
+ 
+@@ -205,18 +209,31 @@
+     }
+ 
+     private Uri createUri(){
+-        File imageFile = new File(getApplicationContext().getExternalFilesDir(null),"camrea_photo.jpg");
+-        return FileProvider.getUriForFile(
+-                getApplicationContext(),
+-                "com.example.camerapermission.fileProvider",
+-                imageFile
+-        );
++        try {
++            File imageFile = new File(getApplicationContext().getExternalFilesDir(null), "external_files.jpg");
++            if (!imageFile.exists()) {
++                imageFile.createNewFile();
++            }
++            return FileProvider.getUriForFile(
++                    getApplicationContext(),
++                    "com.example.challenge_login.fileProvider",
++                    imageFile
++            );
++        }catch (Exception e){
++            Log.e(TAG, "Error creating file URI", e);
++            return null;
++        }
+ 
+     }
+ 
+     private void openCamera() {
+         photoURI = createUri();
+-        takePictureLauncher.launch(photoURI);
++        if(photoURI != null) {
++            takePictureLauncher.launch(photoURI);
++        }else {
++            Log.e(TAG, "Failed to create URI for photo");
++            Toast.makeText(this, "Failed to create URI for photo", Toast.LENGTH_SHORT).show();
++        }
+     }
+     @Override
+     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-permission android:name=\"android.permission.ACTIVITY_RECOGNITION\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\"/>\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>\r\n\r\n    <uses-feature\r\n        android:name=\"android.hardware.sensor.accelerometer\"\r\n        android:required=\"true\" />\r\n    <uses-feature\r\n        android:name=\"android.hardware.camera\"\r\n        android:required=\"true\" />\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.Challenge_Login\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".Profile\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".History\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Chooser\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".MainScreen\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Admin\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RegisterClass\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".End_Screen\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Counter\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ChooserAndCounter\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".LoginActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <provider\r\n            android:authorities=\"com.example.camerapermission.fileProvider\"\r\n            android:name=\"androidx.core.content.FileProvider\"\r\n            android:exported=\"false\"\r\n            android:grantUriPermissions=\"true\">\r\n\r\n            <meta-data\r\n                android:name=\"android.support.File_PROVIDER_PATHS\"\r\n                android:resource=\"@xml/file_paths\"/>\r\n        </provider>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision fb8e19e266231b8de0037d16fd5c91f4a82572ab)
++++ b/app/src/main/AndroidManifest.xml	(date 1719497522263)
+@@ -1,8 +1,10 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:tools="http://schemas.android.com/tools">
++    xmlns:tools="http://schemas.android.com/tools"
++    package="com.example.challenge_login">
++
+ 
+-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
++<uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+     <uses-permission android:name="android.permission.CAMERA"/>
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+ 
+@@ -63,13 +65,13 @@
+             </intent-filter>
+         </activity>
+         <provider
+-            android:authorities="com.example.camerapermission.fileProvider"
++            android:authorities="com.example.challenge_login.fileProvider"
+             android:name="androidx.core.content.FileProvider"
+             android:exported="false"
+             android:grantUriPermissions="true">
+ 
+             <meta-data
+-                android:name="android.support.File_PROVIDER_PATHS"
++                android:name="android.support.FILE_PROVIDER_PATHS"
+                 android:resource="@xml/file_paths"/>
+         </provider>
+     </application>

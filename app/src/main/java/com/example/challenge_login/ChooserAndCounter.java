@@ -356,6 +356,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             }
         });
     }
+    //test
 
     @Override
     public void onSensorChanged(SensorEvent event) {
