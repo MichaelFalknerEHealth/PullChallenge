@@ -47,10 +47,11 @@ public class MainScreen extends AppCompatActivity {
         String name = getIntent().getStringExtra("name");
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        roomsRef = database.getReference("Accounts");
-        roomsRef1 = roomsRef.child(name).child("ImageUri");
-        roomsRef2 = roomsRef1.child("ImageUri");
-        roomsRef2.getKey().toString();
+        DatabaseReference roomsRef = database.getReference("Accounts");
+        DatabaseReference roomsRef1 = roomsRef.child(name);
+        //Tests
+
+        //Eigentlicher Wert
         TVname.setText(name+ "!");
 
 
