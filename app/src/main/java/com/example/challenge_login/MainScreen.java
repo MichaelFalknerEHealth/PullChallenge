@@ -32,7 +32,7 @@ public class MainScreen extends AppCompatActivity {
         IVPic = findViewById(R.id.IVPic);
         TVname = findViewById(R.id.TVname);
         String name = getIntent().getStringExtra("name");
-        String ImageUriString = getIntent().getStringExtra("ImageUri");
+        String ImageUriString = getIntent().getStringExtra("image_uri");
         if (ImageUriString!=null) {
             Uri ImageUri = Uri.parse(ImageUriString);
             IVPic.setImageURI(ImageUri);
