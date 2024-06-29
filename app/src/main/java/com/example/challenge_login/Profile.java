@@ -2,17 +2,9 @@ package com.example.challenge_login;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,20 +17,15 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +34,8 @@ public class Profile extends AppCompatActivity {
     ActivityResultLauncher<Uri> takePictureLauncher;
     Uri ImageUri;
     DatabaseReference roomsRef;
-    DatabaseReference roomRef;
+    DatabaseReference roomsRef1;
+    DatabaseReference roomsRef2;
     private UserDatabase userDB;
     private ImageView IVImage;
     String username;
@@ -70,11 +58,11 @@ public class Profile extends AppCompatActivity {
         IVImage = findViewById(R.id.IVPic);
         userDB = UserDatabase.getUserDatabase(getApplicationContext());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        roomsRef = database.getReference("Accounts");
-        roomRef = roomsRef.child(username);
+
 
         ImageUri = createUri();
         registerPictureLauncher();
+        IVImage.setImageURI(ImageUri);
 
         BTBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +151,7 @@ public class Profile extends AppCompatActivity {
         });
         decisionDialBuilder.create().show();
     }
+
     private Uri createUri(){
         File imageFile = new File(getApplicationContext().getFilesDir(),"camera_photo.jpg");
         return FileProvider.getUriForFile(getApplicationContext(),"com.example.challenge_login.fileprovider",imageFile);
@@ -178,12 +167,11 @@ public class Profile extends AppCompatActivity {
                             if(o){
                                 IVImage.setImageURI(null);
                                 IVImage.setImageURI(ImageUri);
-                                Intent intent = new Intent(Profile.this,MainScreen.class);
-
-                                intent.putExtra("image_uri",ImageUri.toString());
-                                intent.putExtra("name", username);
-                                startActivity(intent);
-                                roomRef.child("ImageUri").setValue(ImageUri.toString());
+                                //Intent intent = new Intent(Profile.this,MainScreen.class);
+                                //intent.putExtra("image_uri",ImageUri.toString());
+                                //intent.putExtra("name", username);
+                                //startActivity(intent);
+                                roomsRef1.child("ImageUri").setValue(ImageUri.toString());
                             }
                         }catch (Exception exception){
                             exception.getStackTrace();
