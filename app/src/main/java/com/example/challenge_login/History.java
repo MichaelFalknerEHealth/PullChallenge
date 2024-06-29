@@ -66,7 +66,7 @@ public class History extends AppCompatActivity {
                     TVHistory.append(formattedText);
                 }
                 } else {
-                    TVHistory.setText("No Data found for user: " + user);
+                    TVHistory.setText(getString(R.string.no_data) + user);
                 }
             }
 

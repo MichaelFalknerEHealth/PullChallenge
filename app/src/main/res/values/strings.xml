@@ -15,8 +15,8 @@
     <string name="TVNoACC">Kein Account? Anmelden</string>
     <string name="TVNoACC2">hier.</string>
     <string name="BTdatabase">Database</string>
-    <string name="TVRegister">Register</string>
-    <string name="BTRegister">Register</string>
+    <string name="TVRegister">Registrieren</string>
+    <string name="BTRegister">Registrieren</string>
     <string name="Player1">Spieler 1</string>
     <string name="Player2">Spieler 2</string>
     <string name="error_room">Raum existiert bereits oder hat schon zwei Spieler</string>
@@ -28,6 +28,7 @@
     <string name="wrong_old">Alters Passwort ist inkorrekt</string>
     <string name="req_pass">Passwort muss mindestens 8 Zeichen beinhalten, Groß- und Kleinbuchstaben, Sonderzeichen und Nummern</string>
     <string name="req_same">Das neue Passwort darf nicht ident mit dem alten Passwort sein</string>
+    <string name="rep_pas">Die Passwörter müssen ident sein</string>
     <string name="tuen">Was können wir für dich tun, </string>
     <string name="old_enter">Altes Passwort eingeben</string>
     <string name="new_enter">Neues Passwort eingeben</string>
@@ -54,5 +55,8 @@
     <string name="password">Passwort</string>
     <string name="profile_pic">Kein Profilbild gefunden</string>
     <string name="new_match">Neues Match</string>
+    <string name="no_data">Keine Daten gefunden für: </string>
+    <string name="user_reg_suc">User registriert</string>
+    <string name="password_repeat">Passwort wiederholen</string>
 
 </resources>

@@ -72,7 +72,7 @@ public class RegisterClass extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(RegisterClass.this, "user registered",
+                                    Toast.makeText(RegisterClass.this, getString(R.string.user_reg_suc),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -81,17 +81,17 @@ public class RegisterClass extends AppCompatActivity {
                 }else{
                     //check if fields are filled
                     if(!validateInput(user)) {
-                        Toast.makeText(RegisterClass.this, "fill in all fields",
+                        Toast.makeText(RegisterClass.this, getString(R.string.fields),
                                 Toast.LENGTH_LONG).show();
                     }
                     //check password
                     if(!validatePassword(password)){
-                        Toast.makeText(RegisterClass.this, "password has to contain at least 8 figures, upper and lower case, numbers and special characters",
+                        Toast.makeText(RegisterClass.this, getString(R.string.req_pass),
                                 Toast.LENGTH_LONG).show();
                     }
                     //check repeated passwords
                     if(!(password.equals(password2))){
-                        Toast.makeText(RegisterClass.this, "passwords have to match",
+                        Toast.makeText(RegisterClass.this, getString(R.string.rep_pas),
                                 Toast.LENGTH_LONG).show();
                     }
                 }

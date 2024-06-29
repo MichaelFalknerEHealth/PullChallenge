@@ -220,13 +220,14 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.hasChild("Player 1") && !snapshot.hasChild("Player 2")) {
                     //Normal
-                    //roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
+                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
 
                     //Test mit der Variable 7
-                    roomRef.child("Player 2").child(userId).child("player2_score").setValue(6);
+                    //roomRef.child("Player 2").child(userId).child("player2_score").setValue(7);
                     isPlayer1 = false;
                     displayCode.setText(roomCode);
                     monitorScores(roomCode);
+
 
                 } else {
                     // Error Handling, wenn der Raum nicht existiert oder schon zwei Spieler gejoint sind
@@ -291,11 +292,13 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     if (snapshot.hasChild("Player 1")) {
                         DataSnapshot player1Snapshot = snapshot.child("Player 1");
                         for (DataSnapshot childSnapshot : player1Snapshot.getChildren()) {
-                            String playerName = childSnapshot.getKey();
+                            String player1Name = childSnapshot.getKey();
                             if (childSnapshot.hasChild("player1_score")) {
                                 player1Score = childSnapshot.child("player1_score").getValue(Integer.class);
                                 player1ScoreValue = player1Score != null ? player1Score : 0;
-                                scoreView.setText(getString(R.string.Player1) +  " (" + playerName + "): " + player1ScoreValue);
+                                scoreView.setText(getString(R.string.Player1) +  " (" + player1Name + "): " + player1ScoreValue);
+                                TVPlayerlist.setText(getString(R.string.Player1) + ": " + player1Name);
+
                             }
                         }
 
@@ -303,11 +306,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     if (snapshot.hasChild("Player 2")) {
                         DataSnapshot player2Snapshot = snapshot.child("Player 2");
                         for (DataSnapshot childSnapshot : player2Snapshot.getChildren()) {
-                            String playerName = childSnapshot.getKey();
+                            String player2Name = childSnapshot.getKey();
                             if (childSnapshot.hasChild("player2_score")) {
                                 player2Score = childSnapshot.child("player2_score").getValue(Integer.class);
                                 player2ScoreValue = player2Score != null ? player2Score : 0;
-                                scoreViewPlayer2.setText(getString(R.string.Player2) +  " (" + playerName + "): " + player2ScoreValue);
+                                scoreViewPlayer2.setText(getString(R.string.Player2) +  " (" + player2Name + "): " + player2ScoreValue);
+                                TVPlayerlist2.setText(getString(R.string.Player2) + ": " + player2Name);
                             }
                         }
                     }
