@@ -29,7 +29,12 @@ import android.os.PowerManager.WakeLock;
 
 import java.util.HashMap;
 import java.util.Random;
-
+/**
+ * Diese Aktivität verwaltet das Spiel "Pull-Up" für zwei Spieler.
+ * Sie verwaltet die Erstellung und das Beitritt zu einem Spielraum,
+ * die Spiellogik für das Zählen von Pull-Ups über den Accelerometer-Sensor,
+ * und speichert die Ergebnisse in Firebase-Datenbanken.
+ */
 public class ChooserAndCounter extends AppCompatActivity implements SensorEventListener {
 
     private DatabaseReference roomsRef;
@@ -69,7 +74,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private PowerManager powerManager;
     private WakeLock wakeLock;
 
-
+    /**
+     * Initialisiert die Ansicht und die UI-Elemente sowie die erforderlichen Sensoren und Firebase-Datenbankverweise.
+     * Diese Methode wird aufgerufen, wenn die Aktivität erstellt wird.
+     *
+     * @param savedInstanceState Die gespeicherten Zustandsinformationen der Aktivität.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +130,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         //Raum erstellen
         createRoomButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Erstellt einen neuen Spielraum mit einem generierten Code und zeigt diesen an.
+             * Startet den Countdown zum Spielbeginn, wenn beide Spieler beigetreten sind.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall der Button "createRoomButton")
+             */
             @Override
             public void onClick(View v) {
                 String roomCode = generateRoomCode();
@@ -132,6 +148,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         //Raum beitreten
         joinRoomButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Tritt einem vorhandenen Spielraum mit einem gegebenen Code bei, wenn dieser existiert.
+             * Startet den Countdown zum Spielbeginn, wenn beide Spieler beigetreten sind.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall der Button "joinRoomButton")
+             */
             @Override
             public void onClick(View v) {
                 String roomCode = roomCodeInput.getText().toString();
@@ -142,6 +164,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         //Runde starten
         okButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Startet den Countdown und das Spiel, wenn beide Spieler im Raum sind.
+             * Zeigt Ergebnisse an und speichert diese in Firebase.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall der Button "okButton")
+             */
             @Override
             public void onClick(View v) {
 
@@ -198,6 +226,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         //ButtonSave war nur für Testzwecke
         BTSave.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Speichert die aktuellen Ergebnisse in der Firebase-Historie.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall der Button "BTSave")
+             */
             @Override
             public void onClick(View v) {
                 saveResultsToHistory();
@@ -207,6 +240,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
         //Button zum zurückgehen
         BTBack.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Beendet die Aktivität und kehrt zur vorherigen Ansicht zurück.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall der Button "BTBack")
+             */
             @Override
             public void onClick(View v) {
                 finish();
@@ -236,13 +274,18 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
 
     }
-
+    /**
+     * Löst den Wake Lock aus, wenn die Aktivität fortgesetzt wird.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "ChooserAndCounter::ProximityWakeLock");
     }
 
+    /**
+     * Löst den Wake Lock, wenn die Aktivität pausiert wird.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -251,6 +294,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         }
     }
 
+    /**
+     * Generiert einen zufälligen Spielraumcode aus Großbuchstaben, Kleinbuchstaben und Zahlen.
+     *
+     * @return Der generierte Spielraumcode als Zeichenkette.
+     */
     private String generateRoomCode() {
         String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lower = "abcdefghijklmnopqrstuvwxyz";
@@ -265,6 +313,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         return new String(roomCode);
     }
 
+    /**
+     * Erstellt einen neuen Spielraum mit einem gegebenen Code und initialisiert den Spieler 1.
+     * Speichert die Ergebnisse in Firebase und aktualisiert die UI entsprechend.
+     *
+     * @param roomCode Der Code des zu erstellenden Spielraums.
+     */
     private void createRoom(String roomCode) {
         String userId = user;
         DatabaseReference roomRef = roomsRef.child(roomCode);
@@ -277,6 +331,12 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         monitorScores(roomCode);
     }
 
+    /**
+     * Tritt einem vorhandenen Spielraum mit einem gegebenen Code bei und initialisiert den Spieler 2.
+     * Speichert die Ergebnisse in Firebase und aktualisiert die UI entsprechend.
+     *
+     * @param roomCode Der Code des Spielraums, dem beigetreten werden soll.
+     */
     private void joinRoom(String roomCode) {
         String userId = user;
 
@@ -312,7 +372,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         });
     }
 
-    //Methode die prüft ob beide Spieler beigetreten sind
+    /**
+     * Überprüft, ob beide Spieler einem Raum beigetreten sind und startet dann den Zähler.
+     *
+     * @param roomCode Der Raumcode des zu überprüfenden Raums
+     */
     private void checkAndStartCounter(String roomCode) {
         DatabaseReference roomRef = roomsRef.child(roomCode);
         roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -332,7 +396,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         });
     }
 
-    //Methode die den Accelerometer startet
+    /**
+     * Startet den Countdown zum Spielbeginn und beginnt mit dem Zählen der Klimmzüge.
+     */
     private void startCounting() {
         handler.postDelayed(new Runnable() {
             @Override
@@ -348,7 +414,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
     }
 
-    //Methode, die den Score anzeigt am Ende
+    /**
+     * Überwacht die Spielstände beider Spieler in Echtzeit.
+     *
+     * @param roomCode Der Raumcode des Raums, dessen Punkte überwacht werden sollen
+     */
     private void monitorScores(String roomCode) {
         DatabaseReference roomRef = roomsRef.child(roomCode);
 
@@ -429,7 +499,13 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     }
 
 
-    //Hier alle beiden Sensoren (Accelerometer und Proximity)
+    /**
+     * Sensor-Event-Methode für den Beschleunigungssensor und Proximitysensor.
+     * Überwacht die Bewegungen des Geräts und zählt die Klimmzüge basierend auf den Bewegungsmustern.
+     * Überwacht die Proximity und sorgt für einen Wake Lock während der Klasse.
+     *
+     * @param event Das SensorEvent, das ausgelöst wurde (Beschleunigung und/oder Proximity).
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -479,13 +555,20 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
 
     }}
-
+    /**
+     * Methode zum Behandeln von Genauigkeitsänderungen des Sensors (SensorEventListener).
+     *
+     * @param sensor Der betroffene Sensor
+     * @param accuracy Die neue Genauigkeit des Sensors
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Nicht gebraucht
     }
 
-    //Methode die Resultate in Firebase speichert
+    /**
+     * Speichert die Ergebnisse des Spiels in der Firebase-Datenbank.
+     */
     private void saveResultsToFirebase() {
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);
@@ -499,7 +582,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     }
 
 
-    //Methode die Resultate in History speichert
+    /**
+     * Speichert die Ergebnisse des Spiels in der Firebase-Datenbank-History
+     */
     private void saveResultsToHistory() {
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);

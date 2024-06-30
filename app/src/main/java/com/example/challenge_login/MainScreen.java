@@ -23,7 +23,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
+/**
+ * Diese Klasse verwaltet die Hauptbildschirmaktivität nach dem Anmelden.
+ * Es zeigt den Benutzernamen, das Profilbild an und bietet Zugriff auf verschiedene Funktionen wie Match-Start, Profilanzeige und Historie.
+ */
 public class MainScreen extends AppCompatActivity {
 
     TextView TVname;
@@ -32,7 +35,11 @@ public class MainScreen extends AppCompatActivity {
     DatabaseReference roomsRef;
     String name;
 
-
+    /**
+     * Initialisiert die Hauptbildschirmaktivität und lädt den Benutzernamen sowie das Profilbild.
+     *
+     * @param savedInstanceState Der gespeicherte Zustand der Aktivität
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +85,12 @@ public class MainScreen extends AppCompatActivity {
         pull_up = findViewById(R.id.pull_up);
         //Button zum Match starten
         pull_up.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Implementiert die Aktion, die beim Klicken auf den "Match starten"-Button ausgeführt wird.
+             * Startet eine neue Aktivität, um das Spiel "ChooserAndCounter" zu beginnen.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall der Button "pull_up")
+             */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChooserAndCounter.class);
@@ -87,6 +100,12 @@ public class MainScreen extends AppCompatActivity {
 
         //Button zum Profil anzeigen
         IVBTProfile.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Implementiert die Aktion, die beim Klicken auf das Profilbild ausgeführt wird.
+             * Startet eine neue Aktivität, um das Profil des Benutzers anzuzeigen.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall das Profilbild "IVBTProfile")
+             */
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(getApplicationContext(),Profile.class);
@@ -96,6 +115,12 @@ public class MainScreen extends AppCompatActivity {
 
         //Button um die History anzuzeigen
         IVHistory.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Implementiert die Aktion, die beim Klicken auf das Historie-Bild ausgeführt wird.
+             * Startet eine neue Aktivität, um die Spielhistorie des Benutzers anzuzeigen.
+             *
+             * @param v Die Ansicht, die das Ereignis ausgelöst hat (in diesem Fall das Historie-Bild "IVHistory")
+             */
             @Override
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(),History.class);
