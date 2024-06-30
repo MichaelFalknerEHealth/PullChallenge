@@ -34,6 +34,10 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Diese Aktivität verwaltet das Benutzerprofil einschließlich Bildauswahl, Passwortänderung und Anzeige.
+ * Sie interagiert mit Firebase für die Speicherung von Bildern und Datenbankoperationen.
+ */
 public class Profile extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1;
     ActivityResultLauncher<Uri> takePictureLauncher;
@@ -43,6 +47,12 @@ public class Profile extends AppCompatActivity {
     private ImageView IVImage;
     String username;
 
+    /**
+     * Initialisiert die Ansicht und die UI-Elemente sowie die erforderlichen Firebase-Datenbankverweise.
+     * Diese Methode wird aufgerufen, wenn die Aktivität erstellt wird.
+     *
+     * @param savedInstanceState Die gespeicherten Zustandsinformationen der Aktivität.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,14 +156,21 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-    //Methode um die Richtigkeit des Passworts zu prüfen
+    /**
+     * Überprüft die Gültigkeit eines Passworts anhand eines definierten Musters.
+     *
+     * @param password Das zu überprüfende Passwort.
+     * @return `true`, wenn das Passwort gültig ist, ansonsten `false`.
+     */
     private Boolean validatePassword(String password) {
         Pattern regex = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
         Matcher m = regex.matcher(password);
         return m.matches();
     }
 
-    //Für die Auswahl des Bildes
+    /**
+     * Zeigt einen Dialog zur Auswahl der Aktion (Kamera öffnen oder Abbrechen) an.
+     */
     public void showDecisionDialog() {
         AlertDialog.Builder decisionDialBuilder = new AlertDialog.Builder(this);
         decisionDialBuilder.setTitle(getString(R.string.picture_choose));
@@ -173,13 +190,20 @@ public class Profile extends AppCompatActivity {
         decisionDialBuilder.create().show();
     }
 
-    //Methode um eine Uri zu erstellen
+    /**
+     * Erstellt eine Uri für die temporäre Speicherung eines aufgenommenen Bildes.
+     *
+     * @return Die erstellte Uri für die temporäre Bildspeicherung.
+     */
     private Uri createUri(){
         File imageFile = new File(getApplicationContext().getFilesDir(),"camera_photo.jpg");
         return FileProvider.getUriForFile(getApplicationContext(),"com.example.challenge_login.fileprovider",imageFile);
     }
 
-    //RegisterPictureLauncher
+    /**
+     * Registriert den ActivityResultLauncher für die Bildaufnahme.
+     * Verarbeitet das Ergebnis nach der Bildaufnahme.
+     */
     private void registerPictureLauncher(){
         takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicture(),
@@ -201,7 +225,9 @@ public class Profile extends AppCompatActivity {
         );
     }
 
-    //Kamera Rechte
+    /**
+     * Überprüft die Kamera-Berechtigung und öffnet die Kamera für die Bildaufnahme.
+     */
     private void checkCameraPermissionAndOpenCamera(){
         if (ActivityCompat.checkSelfPermission(Profile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(Profile.this,
@@ -211,6 +237,13 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    /**
+     * Reagiert auf das Ergebnis der Berechtigungsanfrage.
+     *
+     * @param requestCode Der Code der Berechtigungsanfrage.
+     * @param permissions Die angeforderten Berechtigungen.
+     * @param grantResults Die Ergebnisse der Berechtigungsanfrage.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
