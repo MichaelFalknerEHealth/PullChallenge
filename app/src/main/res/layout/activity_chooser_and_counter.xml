@@ -115,6 +115,7 @@
         android:layout_height="146dp"
         android:gravity="center"
         android:text="@string/countdown"
+        android:visibility="invisible"
         android:textSize="40dp" />
 
     <Button

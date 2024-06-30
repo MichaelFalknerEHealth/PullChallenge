@@ -1,0 +1,26 @@
+Index: app/src/main/java/com/example/challenge_login/MainScreen.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.challenge_login;\r\n\r\nimport android.content.Intent;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\npublic class MainScreen extends AppCompatActivity {\r\n\r\n    TextView TVname;\r\n    Button pull_up;\r\n    ImageView IVHistory, IVProfile, IVPic;\r\n    DatabaseReference roomsRef;\r\n    DatabaseReference roomsRef1;\r\n    DatabaseReference roomsRef2;\r\n\r\n\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_mainscreen);\r\n\r\n        IVHistory = findViewById(R.id.IVHistory);\r\n        IVProfile = findViewById(R.id.IVProfile);\r\n        IVPic = findViewById(R.id.IVPic);\r\n        TVname = findViewById(R.id.TVname);\r\n        String name = getIntent().getStringExtra(\"name\");\r\n\r\n        FirebaseDatabase database = FirebaseDatabase.getInstance();\r\n        DatabaseReference roomsRef = database.getReference(\"Accounts\");\r\n        DatabaseReference roomsRef1 = roomsRef.child(name);\r\n        //Tests\r\n\r\n        //Eigentlicher Wert\r\n        TVname.setText(name+ \"!\");\r\n\r\n\r\n        pull_up = findViewById(R.id.pull_up);\r\n        pull_up.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getApplicationContext(), ChooserAndCounter.class);\r\n                startActivity(intent.putExtra(\"name\",name));\r\n            }\r\n        });\r\n\r\n        IVProfile.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent1 = new Intent(getApplicationContext(),Profile.class);\r\n                startActivity(intent1.putExtra(\"name\",name));\r\n            }\r\n        });\r\n        IVHistory.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent2 = new Intent(getApplicationContext(),History.class);\r\n                startActivity(intent2.putExtra(\"name\",name));\r\n            }\r\n        });\r\n\r\n\r\n\r\n        }\r\n\r\n        private void getUri(){\r\n        roomsRef2.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                if(snapshot.exists()){\r\n                    String ImageUriString = snapshot.toString();\r\n                    Uri ImageUri = Uri.parse(ImageUriString);\r\n                    IVPic.setImageURI(ImageUri);\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError error) {\r\n\r\n            }\r\n        });\r\n        }\r\n    }\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/challenge_login/MainScreen.java b/app/src/main/java/com/example/challenge_login/MainScreen.java
+--- a/app/src/main/java/com/example/challenge_login/MainScreen.java	(revision 613b08e94cb88e1827c84f5af6bc74889cff70a3)
++++ b/app/src/main/java/com/example/challenge_login/MainScreen.java	(date 1719692413562)
+@@ -22,6 +22,7 @@
+ import com.google.firebase.database.FirebaseDatabase;
+ import com.google.firebase.database.ValueEventListener;
+ 
++
+ public class MainScreen extends AppCompatActivity {
+ 
+     TextView TVname;
+@@ -51,6 +52,7 @@
+         DatabaseReference roomsRef1 = roomsRef.child(name);
+         //Tests
+ 
++
+         //Eigentlicher Wert
+         TVname.setText(name+ "!");
+ 

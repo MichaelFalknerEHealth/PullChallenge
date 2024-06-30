@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -42,6 +46,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private String user = "user1";
     private boolean isGravitationSet = false;
     private SensorManager sensorManager;
+    private Sensor proximitySensor;
     private Sensor accelerometer;
     private boolean isMovingUp = false;
     private boolean isMovingDown = false;
@@ -60,6 +65,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
     private float gravitation;
 
     private TextView counter;
+
+    private PowerManager powerManager;
+    private WakeLock wakeLock;
 
 
     @Override
@@ -95,13 +103,19 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         roomsRef = database.getReference("rooms");
         roomsRef2 = database.getReference("History");
 
+        //Proximity Sensor initialisieren
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        sensorManager.registerListener(ChooserAndCounter.this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
 
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
 
         createRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String roomCode = generateRoomCode();
                 createRoom(roomCode);
+                TVCountdown.setVisibility(View.INVISIBLE);
                 displayCode.setText(roomCode);
             }
         });
@@ -110,6 +124,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             @Override
             public void onClick(View v) {
                 String roomCode = roomCodeInput.getText().toString();
+                TVCountdown.setVisibility(View.INVISIBLE);
                 joinRoom(roomCode);
             }
         });
@@ -117,31 +132,55 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TVCountdown.setVisibility(View.VISIBLE); // Mache TVCountdown sichtbar
 
-                // Countdown von 3 herunterzählen
-                new CountDownTimer(3000, 1000) { // 3000 Millisekunden (3 Sekunden), 1000 Millisekunden (1 Sekunde Intervall)
-                    int seconds = 3;
+                String roomCode=displayCode.getText().toString();
+                DatabaseReference roomRef = roomsRef.child(roomCode);
 
+                roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onTick(long millisUntilFinished) {
-                        TVCountdown.setText(String.valueOf(seconds));
-                        seconds=seconds-1;
-                        // Hier Sound abspielen
-                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
-                        mediaPlayer.start();
-                    }
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (snapshot.exists() && snapshot.hasChild("Player 1") && snapshot.hasChild("Player 2")) {
 
-                    @Override
-                    public void onFinish() {
-                        // Countdown abgeschlossen, zeige "START!"
-                        TVCountdown.setText(getString(R.string.start));
-                        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.start);
-                        mediaPlayer.start();
-                        // Hier die Methode aufrufen, um den Counter zu starten
-                        checkAndStartCounter(displayCode.getText().toString());
+                            TVCountdown.setVisibility(View.VISIBLE); // Mache TVCountdown sichtbar
+
+                            // Countdown von 3 herunterzählen
+                            new CountDownTimer(3000, 1000) { // 3000 Millisekunden (3 Sekunden), 1000 Millisekunden (1 Sekunde Intervall)
+                                int seconds = 3;
+
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    TVCountdown.setText(String.valueOf(seconds));
+                                    seconds=seconds-1;
+                                    // Hier Sound abspielen
+                                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
+                                    mediaPlayer.start();
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    // Countdown abgeschlossen, zeige "START!"
+                                    TVCountdown.setText(getString(R.string.start));
+                                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.start);
+                                    mediaPlayer.start();
+                                    // Hier die Methode aufrufen, um den Counter zu starten
+                                    checkAndStartCounter(displayCode.getText().toString());
+                                }
+                            }.start();
+                            // Starte den Countdown
+
+
+                        }else{
+                            //Fehlermeldung wenn nur ein Spieler im Raum ist und gestartet werden soll
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_room_one_player), Toast.LENGTH_LONG).show();
+
+                        }
                     }
-                }.start(); // Starte den Countdown
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // FehlerHandling (wird nicht gebraucht)
+                    }
+                });
+
             }
         });
         BTSave.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +211,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 // Hier Sound abspielen
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ende);
                 mediaPlayer.start();
-
+                sensorManager.unregisterListener(ChooserAndCounter.this, proximitySensor);
                 // You can also transition to another activity or screen here if needed
             }
         };
@@ -180,6 +219,20 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "ChooserAndCounter::ProximityWakeLock");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (wakeLock.isHeld()) {
+            wakeLock.release();
+        }
     }
 
     private String generateRoomCode() {
@@ -251,8 +304,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 if (snapshot.exists() && snapshot.hasChild("Player 1") && snapshot.hasChild("Player 2")) {
                     startCounting();
                 } else {
-                    //Fehlermeldung wenn nur ein Spieler im Raum ist und gestartet werden soll
-                    Toast.makeText(getApplicationContext(), getString(R.string.error_room_one_player), Toast.LENGTH_LONG).show();
+
                 }
             }
 
@@ -391,7 +443,22 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 }
             }
         }
-    }
+        else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            // Handle proximity sensor data
+            if (event.values[0] < proximitySensor.getMaximumRange()) {
+                // Near
+                if (!wakeLock.isHeld()) {
+                    wakeLock.acquire();
+                }
+            } else {
+                // Far
+                if (wakeLock.isHeld()) {
+                    wakeLock.release();
+            }
+        }
+
+
+    }}
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
