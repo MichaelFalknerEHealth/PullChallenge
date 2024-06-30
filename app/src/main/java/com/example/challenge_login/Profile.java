@@ -214,6 +214,7 @@ public class Profile extends AppCompatActivity {
                             if(o){
                                 IVImage.setImageURI(null);
                                 IVImage.setImageURI(ImageUri);
+                                Toast.makeText(Profile.this,getString(R.string.pic_shown_later),Toast.LENGTH_SHORT).show();
                                 roomsRef1.child("Accounts").child(username).child("ImageUri").setValue(ImageUri.toString());
 
                             }

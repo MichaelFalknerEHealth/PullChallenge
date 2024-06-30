@@ -59,4 +59,6 @@
     <string name="user_reg_suc">User registriert</string>
     <string name="password_repeat">Passwort wiederholen</string>
     <string name="cam_perm">Keine Rechte die Kamera zu öffnen</string>
+    <string name="pic_shown_later">Das Bild wird beim nächsten Login angezeigt</string>
+
 </resources>
