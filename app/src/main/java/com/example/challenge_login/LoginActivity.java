@@ -25,9 +25,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * Diese Aktivität verwaltet User-Login mithilfe von Input-Regulierung,
+ * die Möglichkeit, das Passwort kurzzeitig sichtbar zu stellen,
+ * die Navigierung zur User-Registrierung und bei Login zum Mainscreen
+ */
+
 public class LoginActivity extends AppCompatActivity {
     UserDatabase userDB;
 
+    /**
+     * Initialisiert die Ansicht und die UI-Elemente sowie click-listener für Buttons.
+     * Diese Methode wird aufgerufen, wenn die Aktivität erstellt wird.
+     * @param savedInstanceState Die gespeicherten Zustandsinformationen der Aktivität.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         TextView registerBtn = findViewById(R.id.TVregister1);
         ImageButton IBvisibility = findViewById(R.id.IVvisible);
         Intent intent1 = new Intent(getApplicationContext(),RegisterClass.class);
-        Intent intent2 = new Intent(getApplicationContext(),Admin.class);
         Intent intent3 = new Intent(getApplicationContext(),MainScreen.class);
         registerBtn.setPaintFlags(registerBtn.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
@@ -101,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                   });
 
 
-        //Zum Wechseln zum Registrieren
+        // Wechsel zur Registrierung
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

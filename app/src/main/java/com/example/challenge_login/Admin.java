@@ -26,6 +26,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ *
+ * Diese Aktivität war während der Entwicklungszeit hilfreich, um die Datenbank zu überprüfen,
+ * sie wird nicht mehr verwendet
+ *
+ */
+
 public class Admin extends AppCompatActivity {
     UserDatabase userDB;
     List<User> userList;

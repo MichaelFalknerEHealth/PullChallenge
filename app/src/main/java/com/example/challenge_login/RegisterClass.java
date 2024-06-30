@@ -15,14 +15,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Diese Klasse verwaltet die User-Registrierung, einschließlich
+ * validierung der Eingabe sowie Speicherung der Informationen in Firebase
+ *
+ */
+
 public class RegisterClass extends AppCompatActivity {
     private DatabaseReference roomsRef;
-
-
     UserDatabase userDB;
     String UriFiller;
 
 
+    /**
+     * Initialisiert die Ansicht und die UI-Elemente sowie die erforderlichen Firebase-Datenbankverweise.
+     * Diese Methode wird aufgerufen, wenn die Aktivität erstellt wird.
+     * @param savedInstanceState Die gespeicherten Zustandsinformationen der Aktivität.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +107,16 @@ public class RegisterClass extends AppCompatActivity {
             }
         });
     }
+
+
+    /**
+     * Validiert das Passwort mithilfe von regular Expressions - regex
+     *
+     * @param password wird validiert
+     * @return 'true', wenn password dem regex Pattern (mind. 8 Zeichen, Groß- und Kleinbuchstaben,
+     * Zahlen und Sonderzeichen) entspricht
+     * ansonsten 'false'
+     */
     //Passwortvalidierung durch Regex
     private Boolean validatePassword(String password){
         //8 Zeichen, Groß- und Kleinbuchstaben, Nummern, Sonderzeichen
@@ -106,11 +125,18 @@ public class RegisterClass extends AppCompatActivity {
       return (m.matches());
         //return true;
     }
+
+    /**
+     * überprüft ob die User-Eingabe vollständig bzw. nicht leer ist
+     *
+     * @param user User-Objekt enthält username und passwort
+     * @return 'true' wenn beides voll ist,
+     * ansonsten 'false'
+     */
     //Update das Passwort durch input
     private Boolean validateInput(User user){
         if(user.getUname().isEmpty()||
         user.getPassword().isEmpty()){
-            //wieder auf false setzen
             return false;
         }
         return true;
