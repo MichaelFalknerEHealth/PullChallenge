@@ -75,6 +75,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooser_and_counter);
 
+        //Alle Buttons, Textfelder etc. initialisieren
+
         user = getIntent().getStringExtra("name");
         roomCodeInput = findViewById(R.id.roomCodeInput);
         TVPlayerlist = findViewById(R.id.TVPlayerlist);
@@ -90,15 +92,19 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         BTSave = findViewById(R.id.BTSave);
         BTBack = findViewById(R.id.BTBack);
 
-        //Media Players bzw. Sounds
 
 
-        //Test
+
+        //Variablen für Tests
         text_gravitation = findViewById(R.id.gravitation);
+
+
         counter = findViewById(R.id.counter);
 
         pullUpCount = 0;
 
+
+        //Erstellen von den Firebase Referenzen
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         roomsRef = database.getReference("rooms");
         roomsRef2 = database.getReference("History");
@@ -108,8 +114,11 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         sensorManager.registerListener(ChooserAndCounter.this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
 
+        //Power Manager für den Wake Lock
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
 
+
+        //Raum erstellen
         createRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +129,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             }
         });
 
+
+        //Raum beitreten
         joinRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +140,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             }
         });
 
+        //Runde starten
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +178,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                                     checkAndStartCounter(displayCode.getText().toString());
                                 }
                             }.start();
-                            // Starte den Countdown
+                            // Startet den Countdown
 
 
                         }else{
@@ -177,12 +189,14 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     }
                     @Override
                     public void onCancelled(DatabaseError error) {
-                        // FehlerHandling (wird nicht gebraucht)
+                        // Fehler Handling (wird nicht gebraucht)
                     }
                 });
 
             }
         });
+
+        //ButtonSave war nur für Testzwecke
         BTSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +204,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
             }
         });
 
+
+        //Button zum zurückgehen
         BTBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,7 +228,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ende);
                 mediaPlayer.start();
                 sensorManager.unregisterListener(ChooserAndCounter.this, proximitySensor);
-                // You can also transition to another activity or screen here if needed
+
             }
         };
 
@@ -275,7 +291,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
                     //Normal
                     roomRef.child("Player 2").child(userId).child("player2_score").setValue(0);
 
-                    //Test mit der Variable 7
+                    //Für Testzwecke ohne Android Handy
                     //roomRef.child("Player 2").child(userId).child("player2_score").setValue(7);
                     isPlayer1 = false;
                     displayCode.setText(roomCode);
@@ -296,6 +312,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         });
     }
 
+    //Methode die prüft ob beide Spieler beigetreten sind
     private void checkAndStartCounter(String roomCode) {
         DatabaseReference roomRef = roomsRef.child(roomCode);
         roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -315,6 +332,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         });
     }
 
+    //Methode die den Accelerometer startet
     private void startCounting() {
         handler.postDelayed(new Runnable() {
             @Override
@@ -330,6 +348,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
     }
 
+    //Methode, die den Score anzeigt am Ende
     private void monitorScores(String roomCode) {
         DatabaseReference roomRef = roomsRef.child(roomCode);
 
@@ -404,12 +423,13 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Handle possible errors
+                // Handle possible errors (wird nicht verwendet)
             }
         });
     }
-    //test
 
+
+    //Hier alle beiden Sensoren (Accelerometer und Proximity)
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -462,9 +482,10 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not needed
+        // Nicht gebraucht
     }
 
+    //Methode die Resultate in Firebase speichert
     private void saveResultsToFirebase() {
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);
@@ -477,6 +498,8 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         sensorManager.unregisterListener(this);
     }
 
+
+    //Methode die Resultate in History speichert
     private void saveResultsToHistory() {
         String roomCode = displayCode.getText().toString();
         DatabaseReference roomRef = roomsRef.child(roomCode);
@@ -540,7 +563,7 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
 
                         @Override
                         public void onCancelled(DatabaseError error) {
-                            // Handle possible errors
+                            // Handle possible errors (nicht gebraucht)
                         }
                     });
                 }

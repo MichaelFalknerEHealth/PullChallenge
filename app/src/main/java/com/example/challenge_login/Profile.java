@@ -66,6 +66,7 @@ public class Profile extends AppCompatActivity {
 
         registerPictureLauncher();
 
+        //Bild laden aus Firebase
         ImageUri = createUri();
         DatabaseReference ImageUriRef = roomsRef1.child("Accounts").child(username).child("ImageUri");
         ImageUriRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -74,12 +75,8 @@ public class Profile extends AppCompatActivity {
                 if(snapshot.exists()){
                     String ImageUriString = snapshot.getValue(String.class);
                     if (ImageUriString != null && !ImageUriString.isEmpty()) {
-                        Log.d("MainScreen", "Image URI: " + ImageUriString);
-                        // Verwenden Sie eine Bibliothek wie Picasso oder Glide zum Laden des Bildes
                         Uri ImageUri = Uri.parse(ImageUriString);
                         IVImage.setImageURI(ImageUri);
-                    } else {
-                        Log.d("MainScreen", "Image URI is null or empty");
                     }
                 }
             }
@@ -90,6 +87,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        //Button zum zurückgehen
         BTBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +95,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        //Button zum Bild auswählen
         BTPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +103,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        //Button zum Passwort wächseln
         BTChangePW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,12 +146,14 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    //Methode um die Richtigkeit des Passworts zu prüfen
     private Boolean validatePassword(String password) {
         Pattern regex = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
         Matcher m = regex.matcher(password);
         return m.matches();
     }
 
+    //Für die Auswahl des Bildes
     public void showDecisionDialog() {
         AlertDialog.Builder decisionDialBuilder = new AlertDialog.Builder(this);
         decisionDialBuilder.setTitle(getString(R.string.picture_choose));
@@ -171,11 +173,13 @@ public class Profile extends AppCompatActivity {
         decisionDialBuilder.create().show();
     }
 
+    //Methode um eine Uri zu erstellen
     private Uri createUri(){
         File imageFile = new File(getApplicationContext().getFilesDir(),"camera_photo.jpg");
         return FileProvider.getUriForFile(getApplicationContext(),"com.example.challenge_login.fileprovider",imageFile);
     }
 
+    //RegisterPictureLauncher
     private void registerPictureLauncher(){
         takePictureLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicture(),
@@ -197,6 +201,7 @@ public class Profile extends AppCompatActivity {
         );
     }
 
+    //Kamera Rechte
     private void checkCameraPermissionAndOpenCamera(){
         if (ActivityCompat.checkSelfPermission(Profile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(Profile.this,
@@ -213,7 +218,7 @@ public class Profile extends AppCompatActivity {
             if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 takePictureLauncher.launch(ImageUri);
             }else {
-                Toast.makeText(this,"Camera permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(R.string.cam_perm), Toast.LENGTH_SHORT).show();
             }
         }
     }

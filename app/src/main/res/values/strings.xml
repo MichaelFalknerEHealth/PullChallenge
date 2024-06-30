@@ -58,5 +58,5 @@
     <string name="no_data">Keine Daten gefunden für: </string>
     <string name="user_reg_suc">User registriert</string>
     <string name="password_repeat">Passwort wiederholen</string>
-
+    <string name="cam_perm">Keine Rechte die Kamera zu öffnen</string>
 </resources>

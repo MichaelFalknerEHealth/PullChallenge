@@ -27,7 +27,7 @@ public class RegisterClass extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //initialising EditTexts, Buttons, Intents
+        //Initialisiere EditTexts, Buttons, Intents
         setContentView(R.layout.activity_register);
         EditText ETUser = findViewById(R.id.etUser);
         EditText ETPass = findViewById(R.id.edPass);
@@ -44,7 +44,7 @@ public class RegisterClass extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //create user
+                //User Erstellung
                 final User user = new User();
                 String uname = ETUser.getText().toString();
                 String password = ETPass.getText().toString();
@@ -56,13 +56,12 @@ public class RegisterClass extends AppCompatActivity {
                 user.setUname(uname);
                 user.setPassword(password);
                 if(validateInput(user)&& password.equals(password2)&&validatePassword(password)){
-                    //insert operation
                     userDB = UserDatabase.getUserDatabase(getApplicationContext());
                     final UserDAO userDAO = userDB.userDAO();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            //register user and add username to firebase
+                            //Registriert User und fügt Usernamen zu Firebase hinzu
                             userDB.userDAO().addUser(user);
                             roomRef.child("Username").setValue(uname);
                             roomRef.child("Password").setValue(password);
@@ -80,17 +79,17 @@ public class RegisterClass extends AppCompatActivity {
                         }
                     }).start();
                 }else{
-                    //check if fields are filled
+                    //Prüft ob alle Felder befüllt wurden
                     if(!validateInput(user)) {
                         Toast.makeText(RegisterClass.this, getString(R.string.fields),
                                 Toast.LENGTH_LONG).show();
                     }
-                    //check password
+                    //Prüft Passwort
                     if(!validatePassword(password)){
                         Toast.makeText(RegisterClass.this, getString(R.string.req_pass),
                                 Toast.LENGTH_LONG).show();
                     }
-                    //check repeated passwords
+                    //Prüft das wiederholte Passwort
                     if(!(password.equals(password2))){
                         Toast.makeText(RegisterClass.this, getString(R.string.rep_pas),
                                 Toast.LENGTH_LONG).show();
@@ -99,15 +98,15 @@ public class RegisterClass extends AppCompatActivity {
             }
         });
     }
-    //validate Password on regex
+    //Passwortvalidierung durch Regex
     private Boolean validatePassword(String password){
-        //8 figures, upper and lower case,numbers, special character
+        //8 Zeichen, Groß- und Kleinbuchstaben, Nummern, Sonderzeichen
         Pattern regex = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
         Matcher m = regex.matcher(password);
       return (m.matches());
         //return true;
     }
-    //validate password on input
+    //Update das Passwort durch input
     private Boolean validateInput(User user){
         if(user.getUname().isEmpty()||
         user.getPassword().isEmpty()){

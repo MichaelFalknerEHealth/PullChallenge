@@ -36,6 +36,7 @@ public class History extends AppCompatActivity {
 
         Button BTBack = findViewById(R.id.BTBack);
 
+        //Button zum zurückgehen
         BTBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +46,8 @@ public class History extends AppCompatActivity {
         });
 
     }
+
+    //Daten von Firebase bekommen
     private void readDataFromFirebase() {
         TextView TVHistory = findViewById(R.id.TVHistory2);
 
@@ -72,8 +75,8 @@ public class History extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Fehlerbehandlung
-                Log.e("FirebaseData", "Error reading data", error.toException());
+                // Fehlerbehandlung, wird nicht gebraucht
+
             }
         });
     }

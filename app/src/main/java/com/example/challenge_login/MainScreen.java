@@ -47,6 +47,8 @@ public class MainScreen extends AppCompatActivity {
 
         roomsRef = FirebaseDatabase.getInstance().getReference();
 
+
+        //Zum Profilbild laden
         DatabaseReference ImageUriRef = roomsRef.child("Accounts").child(name).child("ImageUri");
         ImageUriRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -54,12 +56,8 @@ public class MainScreen extends AppCompatActivity {
                 if(snapshot.exists()){
                     String ImageUriString = snapshot.getValue(String.class);
                     if (ImageUriString != null && !ImageUriString.isEmpty()) {
-                        Log.d("MainScreen", "Image URI: " + ImageUriString);
-                        // Verwenden Sie eine Bibliothek wie Picasso oder Glide zum Laden des Bildes
                         Uri ImageUri = Uri.parse(ImageUriString);
                         IVImage.setImageURI(ImageUri);
-                    } else {
-                        Log.d("MainScreen", "Image URI is null or empty");
                     }
                 }
             }
@@ -74,10 +72,11 @@ public class MainScreen extends AppCompatActivity {
 
 
 
-        //Eigentlicher Wert
+        //Name anzeigen
         TVname.setText(name+ "!");
 
         pull_up = findViewById(R.id.pull_up);
+        //Button zum Match starten
         pull_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +85,7 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
+        //Button zum Profil anzeigen
         IVBTProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +94,7 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
+        //Button um die History anzuzeigen
         IVHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

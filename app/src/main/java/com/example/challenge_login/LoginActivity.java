@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        //method make password in-/visible
+        //Methode um das Passwort sichtbar bzw. unsichtbar zu machen
         IBvisibility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,18 +65,18 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        //login Button
+        //On Click Listener auf den Login Button
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String uname = ETUser.getText().toString();
                 String password = ETPass.getText().toString();
 
-                //to check if all fields are filled
+                //Prüfen, ob alle Felder befüllt sind
                 if(uname.isEmpty() || password.isEmpty()){
                     Toast.makeText(getApplicationContext(),getString(R.string.fields),Toast.LENGTH_LONG).show();
                 }else {
-                    //Perform Query
+                    //Abfrage ausführen
                     userDB = UserDatabase.getUserDatabase(getApplicationContext());
                     UserDAO userDAO = userDB.userDAO();
                     new Thread(new Runnable() {
@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                   });
 
 
-        //starts intent on register button
+        //Zum Wechseln zum Registrieren
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
