@@ -323,9 +323,9 @@ public class ChooserAndCounter extends AppCompatActivity implements SensorEventL
         String userId = user;
         DatabaseReference roomRef = roomsRef.child(roomCode);
         //Normal
-        //roomRef.child("Player 1").child(userId).child("player1_score").setValue(0);
+        roomRef.child("Player 1").child(userId).child("player1_score").setValue(0);
         //Für Testzwecke ohne Android Handy
-        roomRef.child("Player 1").child(userId).child("player1_score").setValue(6);
+        //roomRef.child("Player 1").child(userId).child("player1_score").setValue(6);
         TVPlayerlist.setText(getString(R.string.Player1) +": "+ userId);
         isPlayer1 = true;
         monitorScores(roomCode);
