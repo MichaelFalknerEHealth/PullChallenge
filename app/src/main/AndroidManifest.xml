@@ -43,9 +43,6 @@
             android:name=".History"
             android:exported="false" />
         <activity
-            android:name=".Chooser"
-            android:exported="false" />
-        <activity
             android:name=".MainScreen"
             android:exported="false" />
         <activity
@@ -53,12 +50,6 @@
             android:exported="false" />
         <activity
             android:name=".RegisterClass"
-            android:exported="false" />
-        <activity
-            android:name=".End_Screen"
-            android:exported="false" />
-        <activity
-            android:name=".Counter"
             android:exported="false" />
         <activity
             android:name=".ChooserAndCounter"
